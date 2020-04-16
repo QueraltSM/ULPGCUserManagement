@@ -96,28 +96,30 @@
                                         <div class="login-header">
                                             <h3>Login</h3>
                                         </div>
-                                        <form action='admin/home.jsp'>
+                                        <form>
                                             <div class="form-group form-focus">
-                                                <input type="email" class="form-control floating">
+                                                <input type="email" id="email" class="form-control floating">
                                                 <label class="focus-label">Email</label>
                                             </div>
                                             <div class="form-group form-focus">
-                                                <input type="password" class="form-control floating">
+                                                <input type="password" id="password" class="form-control floating">
                                                 <label class="focus-label">Password</label>
                                             </div>
 
-                                            <button class="btn btn-primary btn-block btn-lg login-btn" type="submit" onclick="showError()">Login</button>
+                                            <button class="btn btn-primary btn-block btn-lg login-btn" type="button" onclick="login()">Login</button>
                                             <div class="login-or">
                                                 <span class="or-line"></span>
 
                                             </div>
-
+                                            <div id="error"></div>
+                                            <div id="demo"></div>
+                                            <div id="name"></div>
+                                            <div id="type"></div>
                                         </form>
                                     </div>
                                 </div>
                             </div>
                             <!-- /Login Tab Content -->
-
                         </div>
                     </div>
 
@@ -157,6 +159,22 @@
 
 <!-- Custom JS -->
 <script src="assets/js/script.js"></script>
-
+    <link href="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/css/alertify.min.css" rel="stylesheet"/>
+    <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/alertify.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+    <script>
+        var config = {
+                  apiKey: "AIzaSyD4Yzcfr1riLtzhSNYyLTHbQ-xercysVoQ",
+                  authDomain: "medicalia-ce51c.firebaseapp.com",
+                  databaseURL: "https://medicalia-ce51c.firebaseio.com",
+                  projectId: "medicalia-ce51c",
+                  storageBucket: "medicalia-ce51c.appspot.com",
+                  messagingSenderId: "1060550089496",
+                  appId: "1:1060550089496:web:32f793f847de5417a4dc6d",
+                  measurementId: "G-MQLJJNG4KT"
+                };
+                firebase.initializeApp(config);
+    </script>
+    <script src="script.js"></script>
 </body>
 </html>

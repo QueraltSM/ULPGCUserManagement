@@ -27,13 +27,13 @@
 
         <!-- Main CSS -->
         <link rel="stylesheet" href="assets/css/style.css">
-        <script src="../script.js"></script>
+
         <!--[if lt IE 9]>
                 <script src="assets/js/html5shiv.min.js"></script>
                 <script src="assets/js/respond.min.js"></script>
         <![endif]-->
     </head>
-    <body>
+    <body onload="getSessionData()">
 
         <!-- Main Wrapper -->
         <div class="main-wrapper">
@@ -64,7 +64,7 @@
 
                 <!-- Header Right Menu -->
                 <ul class="nav user-menu">
-
+                    <div id="demo"></div>
                     <!-- User Menu -->
                     <li class="nav-item dropdown has-arrow">
                         <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
@@ -76,13 +76,13 @@
                                     <img src="assets/img/profiles/avatar-01.jpg" alt="User Image" class="avatar-img rounded-circle">
                                 </div>
                                 <div class="user-text">
-                                    <h6>Ryan Taylor</h6>
-                                    <p class="text-muted mb-0">Administrator</p>
+                                    <h6 id="name"></h6>
+                                    <p class="text-muted mb-0" id="type"></p>
                                 </div>
                             </div>
                             <a class="dropdown-item" >My Profile</a>
                             <a class="dropdown-item">Settings</a>
-                            <a class="dropdown-item" href="../index.jsp">Logout</a>
+                            <a class="dropdown-item" href="javascript:logout()">Logout</a>
                         </div>
                     </li>
                     <!-- /User Menu -->
@@ -134,7 +134,7 @@
                     <div class="page-header">
                         <div class="row">
                             <div class="col-sm-12">
-                                <h3 class="page-title">Welcome Admin!</h3>
+                                <h3 class="page-title" id="welcome"></h3>
                                 <ul class="breadcrumb">
                                     <li class="breadcrumb-item active">Dashboard</li>
                                 </ul>
@@ -223,5 +223,7 @@
         <!-- Custom JS -->
         <script  src="assets/js/script.js"></script>
 
+        <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+        <script src="../script.js"></script>
     </body>
 </html>

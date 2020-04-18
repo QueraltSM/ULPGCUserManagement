@@ -23,12 +23,8 @@
         <!-- Main CSS -->
         <link rel="stylesheet" href="assets/css/style.css">
 
-        <!--[if lt IE 9]>
-                <script src="assets/js/html5shiv.min.js"></script>
-                <script src="assets/js/respond.min.js"></script>
-        <![endif]-->
     </head>
-    <body>
+    <body onload="getTeachersData()">
 
         <!-- Main Wrapper -->
         <div class="main-wrapper">
@@ -78,13 +74,13 @@
                                     <img src="assets/img/profiles/avatar-01.jpg" alt="User Image" class="avatar-img rounded-circle">
                                 </div>
                                 <div class="user-text">
-                                    <h6>Ryan Taylor</h6>
-                                    <p class="text-muted mb-0">Administrator</p>
+                                    <h6 id="name"></h6>
+                                    <p class="text-muted mb-0" id="type"></p>
                                 </div>
                             </div>
                             <a class="dropdown-item" >My Profile</a>
                             <a class="dropdown-item">Settings</a>
-                            <a class="dropdown-item" href="../index.jsp">Logout</a>
+                            <a class="dropdown-item" href="javascript:logout()">Logout</a>
                         </div>
                     </li>
                     <!-- /User Menu -->
@@ -155,239 +151,8 @@
                                                     <th>Actions</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>982397812S</td>
-                                                    <td>
-                                                        <h2 class="table-avatar">
-                                                            <a  class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-01.jpg" alt="User Image"></a>
-                                                            <a > Ruby Perrin</a>
-                                                        </h2>
-                                                    </td>
-                                                    <td>Software architecture</td>
-                                                    <td>613456324</td>
-                                                    <td class="text-right">
-                                                        <div class="actions">
+                                            <tbody id="teacher_table">
 
-
-                                                            <a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2" onclick="return fnselect('982397812S', ' Ruby Perrin', 'Dental', '613456324')">
-                                                                <i class="fe fe-pencil"></i> Edit
-                                                            </a>
-                                                            <a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal">
-                                                                <i class="fe fe-trash"></i> Delete
-                                                            </a>
-                                                        </div>
-                                                    </td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td>111697819A</td>
-                                                    <td>
-                                                        <h2 class="table-avatar">
-                                                            <a  class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-02.jpg" alt="User Image"></a>
-                                                            <a > Darren Elder</a>
-                                                        </h2>
-                                                    </td>
-                                                    <td>User interface design</td>
-                                                    <td>525641324</td>
-                                                    <td class="text-right">
-                                                        <div class="actions">
-
-                                                            <a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2">
-                                                                <i class="fe fe-pencil"></i> Edit
-                                                            </a>
-                                                            <a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal">
-                                                                <i class="fe fe-trash"></i> Delete
-                                                            </a>
-                                                        </div>
-                                                    </td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td>914263812B</td>
-                                                    <td>
-                                                        <h2 class="table-avatar">
-                                                            <a  class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-03.jpg" alt="User Image"></a>
-                                                            <a > Deborah Angel</a>
-                                                        </h2>
-                                                    </td>
-                                                    <td>Embedded and Real Time Systems</td>
-                                                    <td>4022231492</td>
-                                                    <td class="text-right">
-                                                        <div class="actions">
-
-                                                            <a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2">
-                                                                <i class="fe fe-pencil"></i> Edit
-                                                            </a>
-                                                            <a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal">
-                                                                <i class="fe fe-trash"></i> Delete
-                                                            </a>
-                                                        </div>
-                                                    </td>
-
-                                                </tr>
-                                                <tr>
-
-                                                    <td>111692612W</td>
-                                                    <td>
-                                                        <h2 class="table-avatar">
-                                                            <a  class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-04.jpg" alt="User Image"></a>
-                                                            <a > Sofia Brient</a>
-                                                        </h2>
-                                                    </td>
-                                                    <td>Algorithms and Computability</td>
-                                                    <td>623441524</td>
-                                                    <td class="text-right">
-                                                        <div class="actions">
-
-                                                            <a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2">
-                                                                <i class="fe fe-pencil"></i> Edit
-                                                            </a>
-                                                            <a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal">
-                                                                <i class="fe fe-trash"></i> Delete
-                                                            </a>
-                                                        </div>
-                                                    </td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td>385696811Y</td>
-                                                    <td>
-                                                        <h2 class="table-avatar">
-                                                            <a  class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-05.jpg" alt="User Image"></a>
-                                                            <a > Marvin Campbell</a>
-                                                        </h2>
-                                                    </td>
-                                                    <td>Software architecture</td>
-                                                    <td>666441324</td>
-                                                    <td class="text-right">
-                                                        <div class="actions">
-
-                                                            <a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2">
-                                                                <i class="fe fe-pencil"></i> Edit
-                                                            </a>
-                                                            <a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal">
-                                                                <i class="fe fe-trash"></i> Delete
-                                                            </a>
-                                                        </div>
-                                                    </td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td>221622812I</td>
-                                                    <td>
-                                                        <h2 class="table-avatar">
-                                                            <a  class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-06.jpg" alt="User Image"></a>
-                                                            <a > Katharine Berthold</a>
-                                                        </h2>
-                                                    </td>
-                                                    <td>Digital Systems Design</td>
-                                                    <td>582522384</td>
-                                                    <td class="text-right">
-                                                        <div class="actions">
-
-                                                            <a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2">
-                                                                <i class="fe fe-pencil"></i> Edit
-                                                            </a>
-                                                            <a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal">
-                                                                <i class="fe fe-trash"></i> Delete
-                                                            </a>
-                                                        </div>
-                                                    </td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td>913393312G</td>
-                                                    <td>
-                                                        <h2 class="table-avatar">
-                                                            <a  class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-07.jpg" alt="User Image"></a>
-                                                            <a > Linda Tobin</a>
-                                                        </h2>
-                                                    </td>
-                                                    <td>Intelligent Systems I</td>
-                                                    <td>911725380</td>
-                                                    <td class="text-right">
-                                                        <div class="actions">
-
-                                                            <a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2">
-                                                                <i class="fe fe-pencil"></i> Edit
-                                                            </a>
-                                                            <a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal">
-                                                                <i class="fe fe-trash"></i> Delete
-                                                            </a>
-                                                        </div>
-                                                    </td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td>999697811P</td>
-                                                    <td>
-                                                        <h2 class="table-avatar">
-                                                            <a  class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-08.jpg" alt="User Image"></a>
-                                                            <a > Paul Richard</a>
-                                                        </h2>
-                                                    </td>
-                                                    <td>Intelligent Systems II</td>
-                                                    <td>611327222</td>
-                                                    <td class="text-right">
-                                                        <div class="actions">
-
-                                                            <a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2">
-                                                                <i class="fe fe-pencil"></i> Edit
-                                                            </a>
-                                                            <a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal">
-                                                                <i class="fe fe-trash"></i> Delete
-                                                            </a>
-                                                        </div>
-                                                    </td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td>762355611J</td>
-                                                    <td>
-                                                        <h2 class="table-avatar">
-                                                            <a  class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-09.jpg" alt="User Image"></a>
-                                                            <a > John Gibbs</a>
-                                                        </h2>
-                                                    </td>
-                                                    <td>Business Planning and Control</td>
-                                                    <td>611728984</td>
-                                                    <td class="text-right">
-                                                        <div class="actions">
-
-                                                            <a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2">
-                                                                <i class="fe fe-pencil"></i> Edit
-                                                            </a>
-                                                            <a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal">
-                                                                <i class="fe fe-trash"></i> Delete
-                                                            </a>
-                                                        </div>
-                                                    </td>
-
-                                                </tr>
-                                                <tr>
-                                                    <td>921727184</td>
-                                                    <td>
-                                                        <h2 class="table-avatar">
-                                                            <a  class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="assets/img/doctors/doctor-thumb-10.jpg" alt="User Image"></a>
-                                                            <a > Olga Barlow</a>
-                                                        </h2>
-                                                    </td>
-                                                    <td>Agile Development Methodologies</td>
-                                                    <td>611727384</td>
-                                                    <td class="text-right">
-                                                        <div class="actions">
-
-                                                            <a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2">
-                                                                <i class="fe fe-pencil"></i> Edit
-                                                            </a>
-                                                            <a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal">
-                                                                <i class="fe fe-trash"></i> Delete
-                                                            </a>
-                                                        </div>
-                                                    </td>
-
-                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -555,6 +320,7 @@
 
         <!-- Custom JS -->
         <script  src="assets/js/script.js"></script>
-
+        <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+        <script src="../script.js"></script>
     </body>
 </html>

@@ -28,7 +28,7 @@
                 <script src="assets/js/respond.min.js"></script>
         <![endif]-->
     </head>
-    <body>
+    <body onload="getSessionData()">
 
         <!-- Main Wrapper -->
         <div class="main-wrapper">
@@ -70,16 +70,16 @@
                         <div class="dropdown-menu">
                             <div class="user-header">
                                 <div class="avatar avatar-sm">
-                                    <img src="assets/img/profiles/avatar-01.jpg" alt="User Image" class="avatar-img rounded-circle">
+                                    <img id="imagenU" alt="User Image" class="avatar-img rounded-circle">
                                 </div>
                                 <div class="user-text">
-                                    <h6>Ryan Taylor</h6>
-                                    <p class="text-muted mb-0">Administrator</p>
+                                    <h6 id="name"></h6>
+                                    <p class="text-muted mb-0" id="type"></p>
                                 </div>
                             </div>
                             <a class="dropdown-item" >My Profile</a>
                             <a class="dropdown-item">Settings</a>
-                            <a class="dropdown-item" href="../index.jsp">Logout</a>
+                            <a class="dropdown-item" href="javascript:logout()">Logout</a>
                         </div>
                     </li>
                     <!-- /User Menu -->
@@ -138,45 +138,15 @@
                                     <h4 class="card-title">User data</h4>
                                 </div>
                                 <div class="card-body">
-                                    <form action="#">
+                                    <form action="javascript:addUsers()">
 
                                         <div class="form-group row">
-                                            <label class="col-lg-3 col-form-label">DNI/NIE/NIF</label>
+                                            <label class="col-lg-3 col-form-label">Email:</label>
                                             <div class="col-lg-9">
-                                                <input type="text" class="form-control" id="dni">
+                                                <input type="email" class="form-control" id="email">
                                             </div>
                                         </div>
 
-                                        <div class="form-group row">
-                                            <label class="col-lg-3 col-form-label">Name</label>
-                                            <div class="col-lg-9">
-                                                <input type="text" class="form-control" id="name">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-lg-3 col-form-label">Date of birth</label>
-                                            <div class="col-lg-9">
-                                                <input type="email" class="form-control" id="age">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row" id="address">
-                                            <label class="col-lg-3 col-form-label">Address</label>
-                                            <div class="col-lg-9">
-                                                <input type="text" class="form-control">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-lg-3 col-form-label">Phone</label>
-                                            <div class="col-lg-9">
-                                                <input type="text" class="form-control" id="phone">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label class="col-lg-3 col-form-label">Additional information</label>
-                                            <div class="col-lg-9">
-                                                <textarea class="form-control" id="info" rows="6"></textarea>
-                                            </div>
-                                        </div>
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Password</label>
                                             <div class="col-lg-9">
@@ -191,6 +161,47 @@
                                         </div>
 
                                         <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">DNI/NIE/NIF</label>
+                                            <div class="col-lg-9">
+                                                <input type="text" class="form-control" id="dni">
+                                            </div>
+                                            <div id="errorDNI"></div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Name</label>
+                                            <div class="col-lg-9">
+                                                <input type="text" class="form-control" id="addname">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Date of birth</label>
+                                            <div class="col-lg-9">
+                                                <input type="text" class="form-control" id="age">
+                                            </div>
+                                            <div id="errorDate"></div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Address</label>
+                                            <div class="col-lg-9">
+                                                <input type="text" class="form-control" id="address">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Phone</label>
+                                            <div class="col-lg-9">
+                                                <input type="text" class="form-control" id="phone">
+                                            </div>
+                                            <div id="errorPhone"></div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-3 col-form-label">Additional information</label>
+                                            <div class="col-lg-9">
+                                                <textarea class="form-control" id="info" rows="6"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Image</label>
                                             <div class="col-lg-9">
                                                 <input type="file" class="form-control" id="image">
@@ -198,14 +209,13 @@
                                         </div>
 
 
-
                                         <div class="form-group row" id="Rol">
                                             <label class="col-lg-3 col-form-label">Type</label>
                                             <div class="col-lg-9">
-                                                <select class="select" id="selectx" onchange="handleClick()">
-                                                    <option value="1">Student</option>
-                                                    <option value="2">Teacher</option>
-                                                    <option value="3">Administrator</option>
+                                                <select class="select" id="tipo" onchange="handleClick()">
+                                                    <option value="student">Student</option>
+                                                    <option value="teacher">Teacher</option>
+                                                    <option value="administrator" selected>Administrator</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -213,21 +223,21 @@
                                         <div class="form-group row" id="Category">
                                             <label class="col-lg-3 col-form-label">Category</label>
                                             <div class="col-lg-9">
-                                                <select class="select">
-                                                    <option value="1">First year</option>
-                                                    <option value="4">First year - Double grade</option>
-                                                    <option value="2">Second year</option>
-                                                    <option value="4">Second year - Double grade</option>
-                                                    <option value="3">Third year - Software engineering</option>
-                                                    <option value="3">Third year - Computer engineering</option>
-                                                    <option value="3">Third year - Computing</option>
-                                                    <option value="3">Third year - Information technology</option>
-                                                    <option value="4">Third year - Double grade</option>
-                                                    <option value="3">Fourth year - Software engineering</option>
-                                                    <option value="3">Fourth year - Computer engineering</option>
-                                                    <option value="3">Fourth year - Computing</option>
-                                                    <option value="3">Fourth year - Information technology</option>
-                                                    <option value="4">Fifth year - Double grade</option>
+                                                <select class="select" id="categoryStudent">
+                                                    <option value="First year">First year</option>
+                                                    <option value="First year - Double grade">First year - Double grade</option>
+                                                    <option value="Second year">Second year</option>
+                                                    <option value="Second year - Double grade">Second year - Double grade</option>
+                                                    <option value="Third year - Software engineering">Third year - Software engineering</option>
+                                                    <option value="Third year - Computer engineering">Third year - Computer engineering</option>
+                                                    <option value="Third year - Computing">Third year - Computing</option>
+                                                    <option value="Third year - Information technology">Third year - Information technology</option>
+                                                    <option value="Third year - Double grade">Third year - Double grade</option>
+                                                    <option value="Fourth year - Software engineering">Fourth year - Software engineering</option>
+                                                    <option value="Fourth year - Computer engineering">Fourth year - Computer engineering</option>
+                                                    <option value="Fourth year - Computing">Fourth year - Computing</option>
+                                                    <option value="Fourth year - Information technology">Fourth year - Information technology</option>
+                                                    <option value="Fifth year - Double grade">Fifth year - Double grade</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -235,26 +245,26 @@
                                         <div class="form-group row" id="CategoryT">
                                             <label class="col-lg-3 col-form-label">Category</label>
                                             <div class="col-lg-9">
-                                                <select class="select">
-                                                    <option value="1">Software architecture</option>
-                                                    <option value="2">User interface design</option>
-                                                    <option value="3">Embedded and Real Time Systems</option>
-                                                    <option value="4">Algorithms and Computability</option>
-                                                    <option value="1">Software architecture</option>
-                                                    <option value="1">Digital Systems Design</option>
-                                                    <option value="1">Intelligent Systems I</option>
-                                                    <option value="1">Intelligent Systems II</option>
-                                                    <option value="1">Innovation and Creation of Technology-Based Companies</option>
-                                                    <option value="1">Business Planning and Control</option>
-                                                    <option value="1">Fundamentals of Security</option>
-                                                    <option value="1">Agile Development Methodologies</option>
+                                                <select class="select" id="categoryTeacher">
+                                                    <option value="Software architecture">Software architecture</option>
+                                                    <option value="User interface design">User interface design</option>
+                                                    <option value="Embedded and Real Time Systems">Embedded and Real Time Systems</option>
+                                                    <option value="Algorithms and Computability">Algorithms and Computability</option>
+                                                    <option value="Software architecture">Software architecture</option>
+                                                    <option value="Digital Systems Design">Digital Systems Design</option>
+                                                    <option value="Intelligent Systems I">Intelligent Systems I</option>
+                                                    <option value="Intelligent Systems II">Intelligent Systems II</option>
+                                                    <option value="Innovation and Creation of Technology-Based Companies">Innovation and Creation of Technology-Based Companies</option>
+                                                    <option value="Business Planning and Control">Business Planning and Control</option>
+                                                    <option value="Fundamentals of Security">Fundamentals of Security</option>
+                                                    <option value="Agile Development Methodologies">Agile Development Methodologies</option>
                                                 </select>
                                             </div>
                                         </div>
-
+                                        <div id="error"></div>
 
                                         <div class="text-right">
-                                            <button type="submit" class="btn btn-primary" onclick="addUser()" data-dismiss="modal">Submit</button>
+                                            <button type="submit" class="btn btn-primary" data-dismiss="modal">Añadir</button>
                                         </div>
                                     </form>
                                 </div>
@@ -290,6 +300,7 @@
 
         <!-- Custom JS -->
         <script  src="assets/js/script.js"></script>
-
+        <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
+        <script src="../script.js"></script>
     </body>
 </html>

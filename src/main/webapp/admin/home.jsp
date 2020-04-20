@@ -72,7 +72,7 @@
                         <div class="dropdown-menu">
                             <div class="user-header">
                                 <div class="avatar avatar-sm">
-                                    <img id="imagenU" alt="User Image" class="avatar-img rounded-circle">
+                                    <img id="imagenU2" alt="User Image" class="avatar-img rounded-circle">
                                 </div>
                                 <div class="user-text">
                                     <h6 id="name"></h6>

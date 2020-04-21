@@ -63,11 +63,82 @@ function connectToFirebase() {
 function getSessionData() {
     connectToFirebase();
     fotos();
+    if (window.location.href === "http://localhost:8080/ULPGCUserManagement/admin/home.jsp") {
+        countUsers();
+    }
     document.getElementById("name").innerHTML = sessionStorage.getItem("name");
     if (document.getElementById("welcome")) {
         document.getElementById("welcome").innerHTML = "Welcome " + sessionStorage.getItem("name");
     }
     document.getElementById("type").innerHTML = sessionStorage.getItem("type");
+}
+
+function countUsers() {
+    var users = [0, 0, 0];
+    firebase.database().ref('Users/').once('value').then(function (snapshot) {
+        snapshot.forEach(function (childX) {
+            if (childX.child("type").val() === "administrator") {
+                users[0] += 1;
+                document.getElementById("total_administrators").innerHTML = users[0];
+            }
+            if (childX.child("type").val() === "student") {
+                users[1] += 1;
+                document.getElementById("total_students").innerHTML = users[1];
+            }
+            if (childX.child("type").val() === "teacher") {
+                users[2] += 1;
+                document.getElementById("total_teachers").innerHTML = users[2];
+            }
+        });
+    });
+}
+
+function setUserInfo(id) {
+    //console.log(id);
+    sessionStorage.setItem("id_users", id);
+    firebase.database().ref('Users/' + id).once('value').then(function (snapshot) {
+        //console.log("Id: " + snapshot.key);
+        //console.log("DNI: " + snapshot.child("dni").val());
+        sessionStorage.setItem("type_users", snapshot.child("type").val());
+        document.getElementById("dni_user").value = snapshot.child("dni").val();
+        document.getElementById("name_user").value = snapshot.child("name").val();
+        document.getElementById("date_user").value = snapshot.child("birth").val();
+        document.getElementById("address_user").value = snapshot.child("address").val();
+        document.getElementById("phone_user").value = snapshot.child("phone").val();
+        document.getElementById("information_user").value = snapshot.child("information").val();
+        if (snapshot.child("type").val() !== "administrator") {
+            document.getElementById("category").value = snapshot.child("category").val();
+        }
+    });
+}
+
+function updateUsers() {
+    var id = sessionStorage.getItem("id_users");
+    var tipo = sessionStorage.getItem("type_users");
+    var dni = document.getElementById("dni_user").value;
+    var date = document.getElementById("date_user").value;
+    var phone = document.getElementById("phone_user").value;
+    
+    if (tipo === "administrator") {
+        category = "";
+    } else if (tipo === "student") {
+        category = document.getElementById("category").value;
+    } else if (tipo === "teacher") {
+        category = document.getElementById("category").value;
+    }
+    console.log("Hola");
+    if (validateDNI(dni) && validateDate(date) && validatePhone(phone)) {
+            console.log("Hola2");
+        firebase.database().ref('Users/' + id).update({
+            dni: document.getElementById("dni_user").value,
+            name: document.getElementById("name_user").value,
+            birth: document.getElementById("date_user").value,
+            address: document.getElementById("address_user").value,
+            phone: document.getElementById("phone_user").value,
+            information: document.getElementById("information_user").value,
+            category: category
+        });
+    }
 }
 
 function getAdministratorsData() {
@@ -76,12 +147,13 @@ function getAdministratorsData() {
         //alert(snapshot.key);
         var content = "";
         snapshot.forEach(function (childX) {
+            //alert(childX.key);
             //alert(childX.child("type").val());
             if (childX.child("type").val() === "administrator") {
                 content += "<tr>" + "<td>" + childX.child("dni").val() + "</td>" +
                         "<td>" + childX.child("name").val() + "</td>" +
                         "<td>" + childX.child("phone").val() + "</td>" +
-                        '<td><a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2" onclick=""> <i class="fe fe-pencil"></i> Edit</a>' +
+                        '<td><a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2" onclick=setUserInfo("' + childX.key + '")> <i class="fe fe-pencil"></i> Edit</a>' +
                         '<a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal">    <i class="fe fe-trash"></i> Delete </a></td>' +
                         "</tr>";
             }
@@ -100,7 +172,7 @@ function getTeachersData() {
                         "<td>" + childX.child("name").val() + "</td>" +
                         "<td>" + childX.child("category").val() + "</td>" +
                         "<td>" + childX.child("phone").val() + "</td>" +
-                        '<td><a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2" onclick=""> <i class="fe fe-pencil"></i> Edit</a>' +
+                        '<td><a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2" onclick=setUserInfo("' + childX.key + '")> <i class="fe fe-pencil"></i> Edit</a>' +
                         '<a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal">    <i class="fe fe-trash"></i> Delete </a></td>' +
                         "</tr>";
             }
@@ -119,7 +191,7 @@ function getStudentsData() {
                         "<td>" + childX.child("name").val() + "</td>" +
                         "<td>" + childX.child("category").val() + "</td>" +
                         "<td>" + childX.child("phone").val() + "</td>" +
-                        '<td><a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2" onclick=""> <i class="fe fe-pencil"></i> Edit</a>' +
+                        '<td><a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2" onclick=setUserInfo("' + childX.key + '")> <i class="fe fe-pencil"></i> Edit</a>' +
                         '<a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal">    <i class="fe fe-trash"></i> Delete </a></td>' +
                         "</tr>";
             }
@@ -199,7 +271,7 @@ function validateDNI(dni) {
 }
 
 function validateDate(date) {
-    var ex_regular_date = /^(\d{1,2})-(\d{1,2})-(\d{4})$/;
+    var ex_regular_date = /^([0-2][0-9]|3[0-1])(\/|-)(0[1-9]|1[0-2])\2(\d{4})(\s)?(([0-1][0-9]|2[0-3])(:)([0-5][0-9]))*/;
     if (ex_regular_date.test(date) !== true) {
         document.getElementById("errorDate").innerHTML = "Fecha de nacimiento errónea, formato no válido. Ej 1-1-2000";
         return false;

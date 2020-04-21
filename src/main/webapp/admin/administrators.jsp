@@ -62,16 +62,15 @@
 
                 <!-- Header Right Menu -->
                 <ul class="nav user-menu">
-
                     <!-- User Menu -->
                     <li class="nav-item dropdown has-arrow">
                         <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                            <span class="user-img"><img class="rounded-circle" src="assets/img/profiles/avatar-01.jpg" width="31" alt="Ryan Taylor"></span>
+                            <span class="user-img"><img class="rounded-circle"  width="31" id="imagenU"></span>
                         </a>
                         <div class="dropdown-menu">
                             <div class="user-header">
                                 <div class="avatar avatar-sm">
-                                    <img src="assets/img/profiles/avatar-01.jpg" alt="User Image" class="avatar-img rounded-circle">
+                                    <img id="imagenU2" alt="User Image" class="avatar-img rounded-circle">
                                 </div>
                                 <div class="user-text">
                                     <h6 id="name"></h6>
@@ -165,7 +164,7 @@
             <!-- /Page Wrapper -->
 
         </div>
-        
+
         <!-- Edit Details Modal -->
         <div class="modal fade" id="edit_invoice_report" aria-hidden="true" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document" >
@@ -182,31 +181,40 @@
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>DNI/NIE/NIF</label>
-                                        <input type="text" class="form-control" id="dni">
+                                        <input type="text" class="form-control" id="dni_user">
                                     </div>
+                                    <div id="errorDNI"></div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Name</label>
-                                        <input type="text" class="form-control" id="name">
+                                        <input type="text" class="form-control" id="name_user">
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Date of birth</label>
-                                        <input type="text" class="form-control" placeholder="10/10/1986">
+                                        <input type="text" class="form-control" id="date_user">
                                     </div>
+                                    <div id="errorDate"></div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Address</label>
-                                        <input type="text"  class="form-control" placeholder="4417  Goosetown Drive, Taylorsville, North Carolina, 28681">
+                                        <input type="text"  class="form-control" id="address_user">
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Phone</label>
-                                        <input type="text"  class="form-control" placeholder="8286329170">
+                                        <input type="text"  class="form-control" id="phone_user">
+                                    </div>
+                                    <div id="errorPhone"></div>
+                                </div>
+                                <div class="col-24 col-sm-10">
+                                    <div class="form-group">
+                                        <label>Additional information</label>
+                                        <textarea class="form-control" rows="3" id="information_user"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6">
@@ -216,7 +224,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block" onclick="saveModification()" data-dismiss="modal">Save Changes</button>
+                            <button type="submit" class="btn btn-primary btn-block" onclick="updateUsers()" data-dismiss="modal">Save Changes</button>
                         </form>
                     </div>
                 </div>

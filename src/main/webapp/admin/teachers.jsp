@@ -62,16 +62,15 @@
 
                 <!-- Header Right Menu -->
                 <ul class="nav user-menu">
-
                     <!-- User Menu -->
                     <li class="nav-item dropdown has-arrow">
                         <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                            <span class="user-img"><img class="rounded-circle" src="assets/img/profiles/avatar-01.jpg" width="31" alt="Ryan Taylor"></span>
+                            <span class="user-img"><img class="rounded-circle"  width="31" id="imagenU"></span>
                         </a>
                         <div class="dropdown-menu">
                             <div class="user-header">
                                 <div class="avatar avatar-sm">
-                                    <img src="assets/img/profiles/avatar-01.jpg" alt="User Image" class="avatar-img rounded-circle">
+                                    <img id="imagenU2" alt="User Image" class="avatar-img rounded-circle">
                                 </div>
                                 <div class="user-text">
                                     <h6 id="name"></h6>
@@ -186,57 +185,59 @@
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>DNI/NIE/NIF</label>
-                                        <input type="text" class="form-control" placeholder="111697819A">
+                                        <input type="text" class="form-control" id="dni_user">
                                     </div>
+                                    <div id="errorDNI"></div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Name</label>
-                                        <input type="text" class="form-control"  placeholder="Dr. Ruby Perrin">
+                                        <input type="text" class="form-control" id="name_user">
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
-                                        <label>Birth date</label>
-                                        <input type="text" class="form-control" placeholder="10/10/1986">
+                                        <label>Date of birth</label>
+                                        <input type="text" class="form-control" id="date_user">
                                     </div>
+                                    <div id="errorDate"></div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Address</label>
-                                        <input type="text"  class="form-control" placeholder="4417  Goosetown Drive, Taylorsville, North Carolina, 28681">
+                                        <input type="text"  class="form-control" id="address_user">
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Phone</label>
-                                        <input type="text"  class="form-control" placeholder="613456324">
+                                        <input type="text"  class="form-control" id="phone_user">
                                     </div>
+                                    <div id="errorPhone"></div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Category</label>
-                                        <select class="form-control">
-                                            <option>Software architecture</option>
-                                            <option value="1">Software architecture</option>
-                                            <option value="2">User interface design</option>
-                                            <option value="3">Embedded and Real Time Systems</option>
-                                            <option value="4">Algorithms and Computability</option>
-                                            <option value="1">Software architecture</option>
-                                            <option value="1">Digital Systems Design</option>
-                                            <option value="1">Intelligent Systems I</option>
-                                            <option value="1">Intelligent Systems II</option>
-                                            <option value="1">Innovation and Creation of Technology-Based Companies</option>
-                                            <option value="1">Business Planning and Control</option>
-                                            <option value="1">Fundamentals of Security</option>
-                                            <option value="1">Agile Development Methodologies</option>
+                                        <select class="form-control" id="category">
+                                            <option value="Software architecture">Software architecture</option>
+                                            <option value="User interface design">User interface design</option>
+                                            <option value="Embedded and Real Time Systems">Embedded and Real Time Systems</option>
+                                            <option value="Algorithms and Computability">Algorithms and Computability</option>
+                                            <option value="Software architecture">Software architecture</option>
+                                            <option value="Digital Systems Design">Digital Systems Design</option>
+                                            <option value="Intelligent Systems I">Intelligent Systems I</option>
+                                            <option value="Intelligent Systems II">Intelligent Systems II</option>
+                                            <option value="Innovation and Creation of Technology-Based Companies">Innovation and Creation of Technology-Based Companies</option>
+                                            <option value="Business Planning and Control">Business Planning and Control</option>
+                                            <option value="Fundamentals of Security">Fundamentals of Security</option>
+                                            <option value="Agile Development Methodologies">Agile Development Methodologies</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-24 col-sm-10">
                                     <div class="form-group">
                                         <label>Additional information</label>
-                                        <textarea class="form-control" id="info" rows="3" placeholder=""></textarea>
+                                        <textarea class="form-control" rows="3" id="information_user"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6">
@@ -246,7 +247,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block" onclick="showError()">Save Changes</button>
+                            <button type="submit" class="btn btn-primary btn-block" onclick="updateUsers()" data-dismiss="modal">Save Changes</button>
                         </form>
                     </div>
                 </div>

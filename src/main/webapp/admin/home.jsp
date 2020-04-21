@@ -151,7 +151,7 @@
                                                 <i class="fe fe-users"></i>
                                             </span>
                                             <div class="dash-count">
-                                                <h3>168</h3>
+                                                <h3 id="total_teachers"></h3>
                                             </div>
                                         </div>
                                         <div class="dash-widget-info">
@@ -168,7 +168,7 @@
                                                 <i class="fe fe-users"></i>
                                             </span>
                                             <div class="dash-count">
-                                                <h3>152</h3>
+                                                <h3 id="total_students"></h3>
                                             </div>
                                         </div>
                                         <div class="dash-widget-info">
@@ -185,7 +185,7 @@
                                                 <i class="fe fe-users"></i>
                                             </span>
                                             <div class="dash-count">
-                                                <h3>487</h3>
+                                                <h3 id="total_administrators"></h3>
                                             </div>
                                         </div>
                                         <div class="dash-widget-info">

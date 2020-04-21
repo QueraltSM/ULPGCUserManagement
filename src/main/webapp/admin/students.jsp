@@ -62,23 +62,22 @@
 
                 <!-- Header Right Menu -->
                 <ul class="nav user-menu">
-
                     <!-- User Menu -->
                     <li class="nav-item dropdown has-arrow">
                         <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                            <span class="user-img"><img class="rounded-circle" src="assets/img/profiles/avatar-01.jpg" width="31" alt="Ryan Taylor"></span>
+                            <span class="user-img"><img class="rounded-circle"  width="31" id="imagenU"></span>
                         </a>
                         <div class="dropdown-menu">
                             <div class="user-header">
                                 <div class="avatar avatar-sm">
-                                    <img src="assets/img/profiles/avatar-01.jpg" alt="User Image" class="avatar-img rounded-circle">
+                                    <img id="imagenU2" alt="User Image" class="avatar-img rounded-circle">
                                 </div>
                                 <div class="user-text">
                                     <h6 id="name"></h6>
                                     <p class="text-muted mb-0" id="type"></p>
                                 </div>
                             </div>
-                            <a class="dropdown-item">My Profile</a>
+                            <a class="dropdown-item" >My Profile</a>
                             <a class="dropdown-item">Settings</a>
                             <a class="dropdown-item" href="javascript:logout()">Logout</a>
                         </div>
@@ -185,59 +184,61 @@
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>DNI/NIE/NIF</label>
-                                        <input type="text" class="form-control" id="dni">
+                                        <input type="text" class="form-control" id="dni_user">
                                     </div>
+                                    <div id="errorDNI"></div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Name</label>
-                                        <input type="text" class="form-control" id="name">
+                                        <input type="text" class="form-control" id="name_user">
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Date of birth</label>
-                                        <input type="text" class="form-control" placeholder="10/10/1986">
+                                        <input type="text" class="form-control" id="date_user">
                                     </div>
+                                    <div id="errorDate"></div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Address</label>
-                                        <input type="text"  class="form-control" placeholder="4417  Goosetown Drive, Taylorsville, North Carolina, 28681">
+                                        <input type="text"  class="form-control" id="address_user">
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Phone</label>
-                                        <input type="text"  class="form-control" placeholder="8286329170">
+                                        <input type="text"  class="form-control" id="phone_user">
                                     </div>
+                                    <div id="errorPhone"></div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Category</label>
-                                        <select class="form-control">
-                                            <option>First year</option>
-                                            <option value="1">First year</option>
-                                            <option value="4">First year - Double grade</option>
-                                            <option value="2">Second year</option>
-                                            <option value="4">Second year - Double grade</option>
-                                            <option value="3">Third year - Software engineering</option>
-                                            <option value="3">Third year - Computer engineering</option>
-                                            <option value="3">Third year - Computing</option>
-                                            <option value="3">Third year - Information technology</option>
-                                            <option value="4">Third year - Double grade</option>
-                                            <option value="3">Fourth year - Software engineering</option>
-                                            <option value="3">Fourth year - Computer engineering</option>
-                                            <option value="3">Fourth year - Computing</option>
-                                            <option value="3">Fourth year - Information technology</option>
-                                            <option value="4">Fifth year - Double grade</option>
+                                        <select class="form-control" id="category">
+                                            <option value="First year">First year</option>
+                                            <option value="First year - Double grade">First year - Double grade</option>
+                                            <option value="Second year">Second year</option>
+                                            <option value="Second year - Double grade">Second year - Double grade</option>
+                                            <option value="Third year - Software engineering">Third year - Software engineering</option>
+                                            <option value="Third year - Computer engineering">Third year - Computer engineering</option>
+                                            <option value="Third year - Computing">Third year - Computing</option>
+                                            <option value="Third year - Information technology">Third year - Information technology</option>
+                                            <option value="Third year - Double grade">Third year - Double grade</option>
+                                            <option value="Fourth year - Software engineering">Fourth year - Software engineering</option>
+                                            <option value="Fourth year - Computer engineering">Fourth year - Computer engineering</option>
+                                            <option value="Fourth year - Computing">Fourth year - Computing</option>
+                                            <option value="Fourth year - Information technology">Fourth year - Information technology</option>
+                                            <option value="Fifth year - Double grade">Fifth year - Double grade</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-24 col-sm-10">
                                     <div class="form-group">
                                         <label>Additional information</label>
-                                        <textarea class="form-control" id="info" rows="3" placeholder=""></textarea>
+                                        <textarea class="form-control" rows="3" id="information_user"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6">
@@ -247,7 +248,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block">Save Changes</button>
+                            <button type="submit" class="btn btn-primary btn-block" onclick="updateUsers()" data-dismiss="modal">Save Changes</button>
                         </form>
                     </div>
                 </div>

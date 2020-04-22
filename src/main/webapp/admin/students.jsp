@@ -179,38 +179,38 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form>
+                        <form onsubmit="updateUsers(); return false">
                             <div class="row form-row">
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>DNI/NIE/NIF</label>
-                                        <input type="text" class="form-control" id="dni_user">
+                                        <input type="text" class="form-control" id="dni">
                                     </div>
                                     <div id="errorDNI"></div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Name</label>
-                                        <input type="text" class="form-control" id="name_user">
+                                        <input type="text" class="form-control" id="username">
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Date of birth</label>
-                                        <input type="text" class="form-control" id="date_user">
+                                        <input type="text" class="form-control" id="birth">
                                     </div>
                                     <div id="errorDate"></div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Address</label>
-                                        <input type="text"  class="form-control" id="address_user">
+                                        <input type="text"  class="form-control" id="address">
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Phone</label>
-                                        <input type="text"  class="form-control" id="phone_user">
+                                        <input type="text"  class="form-control" id="phone">
                                     </div>
                                     <div id="errorPhone"></div>
                                 </div>
@@ -238,17 +238,17 @@
                                 <div class="col-24 col-sm-10">
                                     <div class="form-group">
                                         <label>Additional information</label>
-                                        <textarea class="form-control" rows="3" id="information_user"></textarea>
+                                        <textarea class="form-control" rows="3" id="information"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Image</label>
-                                        <input type="file"  class="form-control">
+                                        <input type="file"  class="form-control"  id="profile_photo" accept="image/*">
                                     </div>
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block" onclick="updateUsers()" data-dismiss="modal">Save Changes</button>
+                            <button type="submit" class="btn btn-primary btn-block">Save Changes</button>
                         </form>
                     </div>
                 </div>

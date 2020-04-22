@@ -144,6 +144,7 @@
                                             <label class="col-lg-3 col-form-label">Email</label>
                                             <div class="col-lg-9">
                                                 <input type="email" class="form-control" id="email" required>
+                                                <div id="errorEmail" class="error_label"></div>
                                             </div>
                                         </div>
 
@@ -157,30 +158,31 @@
                                             <label class="col-lg-3 col-form-label">Repeat Password</label>
                                             <div class="col-lg-9">
                                                 <input type="password" class="form-control" id="password_repeat" required>
+                                                <div id="errorPass" class="error_label"></div>
                                             </div>
-                                            <div id="errorPass"></div>
                                         </div>
 
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">DNI/NIE/NIF</label>
                                             <div class="col-lg-9">
                                                 <input type="text" class="form-control" id="dni" required>
+                                                <div id="errorDNI" class="error_label"></div>
                                             </div>
-                                            <div id="errorDNI"></div>
+                                            
                                         </div>
 
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Name</label>
                                             <div class="col-lg-9">
-                                                <input type="text" class="form-control" id="addname" required>
+                                                <input type="text" class="form-control" id="username" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Date of birth</label>
                                             <div class="col-lg-9">
-                                                <input type="text" class="form-control" id="age" required>
+                                                <input type="text" class="form-control" id="birth" required>
+                                            <div id="errorDate" class="error_label"></div>
                                             </div>
-                                            <div id="errorDate"></div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Address</label>
@@ -192,20 +194,20 @@
                                             <label class="col-lg-3 col-form-label">Phone</label>
                                             <div class="col-lg-9">
                                                 <input type="text" class="form-control" id="phone" required>
+                                            <div id="errorPhone" class="error_label"></div>
                                             </div>
-                                            <div id="errorPhone"></div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Additional information</label>
                                             <div class="col-lg-9">
-                                                <textarea class="form-control" id="info" rows="6"></textarea>
+                                                <textarea class="form-control" id="information" rows="6"></textarea>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Image</label>
                                             <div class="col-lg-9">
-                                                <input type="file" class="form-control" id="image" required>
+                                                <input type="file" class="form-control" id="profile_photo" required accept="image/*">
                                             </div>
                                         </div>
                                         <div class="form-group row" id="Rol">
@@ -260,10 +262,8 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div id="error"></div>
-
                                         <div class="text-right">
-                                            <button type="submit" class="btn btn-primary" data-dismiss="modal">Añadir</button>
+                                            <button type="submit" class="btn btn-primary" data-dismiss="modal">Submit</button>
                                         </div>
                                     </form>
                                 </div>

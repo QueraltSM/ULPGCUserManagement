@@ -65,6 +65,11 @@ body {
 	overflow-x: hidden;
 }
 
+.error_label {
+    color: red;
+    font-size: 12px;
+}
+
 h1,
 h2,
 h3,

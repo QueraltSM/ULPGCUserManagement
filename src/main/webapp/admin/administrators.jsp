@@ -220,7 +220,7 @@
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Image</label>
-                                        <input type="file"  class="form-control">
+                                        <input type="file"  class="form-control"  id="imagenF" accept="image/*">
                                     </div>
                                 </div>
                             </div>
@@ -246,7 +246,7 @@
                         <div class="form-content p-2">
                             <h4 class="modal-title">Delete</h4>
                             <p class="mb-4">Are you sure want to delete?</p>
-                            <button type="button" class="btn btn-primary">Save </button>
+                            <button type="button" class="btn btn-primary" onclick="deleteUser()">Save </button>
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         </div>
                     </div>

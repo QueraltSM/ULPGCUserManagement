@@ -143,7 +143,7 @@
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Email:</label>
                                             <div class="col-lg-9">
-                                                <input type="email" class="form-control" id="email">
+                                                <input type="email" class="form-control" id="email" >
                                             </div>
                                         </div>
 

@@ -94,8 +94,8 @@ function countUsers() {
 }
 
 function setUserInfo(id) {
-    //console.log(id);
-    sessionStorage.setItem("id_users", id);
+    console.log(id);
+    storeUIDSelected(id);
     firebase.database().ref('Users/' + id).once('value').then(function (snapshot) {
         //console.log("Id: " + snapshot.key);
         //console.log("DNI: " + snapshot.child("dni").val());
@@ -112,13 +112,18 @@ function setUserInfo(id) {
     });
 }
 
+function storeUIDSelected(uid) {
+    sessionStorage.setItem("id_users", uid);
+}
+
 function updateUsers() {
     var id = sessionStorage.getItem("id_users");
     var tipo = sessionStorage.getItem("type_users");
     var dni = document.getElementById("dni_user").value;
     var date = document.getElementById("date_user").value;
     var phone = document.getElementById("phone_user").value;
-    
+    var image = document.getElementById("imagenF").file[0];
+
     if (tipo === "administrator") {
         category = "";
     } else if (tipo === "student") {
@@ -128,7 +133,7 @@ function updateUsers() {
     }
     console.log("Hola");
     if (validateDNI(dni) && validateDate(date) && validatePhone(phone)) {
-            console.log("Hola2");
+        console.log("Hola2");
         firebase.database().ref('Users/' + id).update({
             dni: document.getElementById("dni_user").value,
             name: document.getElementById("name_user").value,
@@ -138,7 +143,28 @@ function updateUsers() {
             information: document.getElementById("information_user").value,
             category: category
         });
+        var starsRef = firebase.storage().ref().child(id + ".jpg").put
+
+        if (image.type.includes("imagenF")) {
+            var storageRef = firebase.storage().ref();
+            var thisRef = storageRef.child(id + ".jpg");
+            thisRef.put(file).then(function (snapshot) {
+                alert("User has been updated");
+            });
+        } else {
+            alert("File must be an image");
+        }
     }
+}
+
+function deleteUser() {
+    alert("Hola");
+    firebase.database().ref("Users/").child(sessionStorage.getItem("id_users")).remove().then(function () {
+        deletePhoto(uid);
+        alert("HOla");
+    }).catch(function (error) {
+        alert(error); // An error happened.
+    });
 }
 
 function getAdministratorsData() {
@@ -154,7 +180,7 @@ function getAdministratorsData() {
                         "<td>" + childX.child("name").val() + "</td>" +
                         "<td>" + childX.child("phone").val() + "</td>" +
                         '<td><a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2" onclick=setUserInfo("' + childX.key + '")> <i class="fe fe-pencil"></i> Edit</a>' +
-                        '<a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal">    <i class="fe fe-trash"></i> Delete </a></td>' +
+                        '<a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal" onclick=storeUIDSelected("' + childX.key + '")>    <i class="fe fe-trash"></i> Delete </a></td>' +
                         "</tr>";
             }
         });
@@ -210,6 +236,15 @@ function fotos() {
     });
 }
 
+function saveImage(uid) {
+    var file = document.getElementById("image").files[0];
+    var storageRef = firebase.storage().ref();
+    var thisRef = storageRef.child(uid + ".jpg");
+    thisRef.put(file).then(function (snapshot) {
+        window.location = "home.jsp";
+    });
+}
+
 function addUsers() {
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
@@ -239,6 +274,11 @@ function addUsers() {
                 information: document.getElementById("info").value,
                 type: document.getElementById("tipo").value,
                 category: categoria
+            }, function (error) {
+                if (error)
+                    alert(error);
+                else
+                    saveImage(snapshot.uid);
             });
         }).catch(function (error) {
             var errorMessage = error.message;

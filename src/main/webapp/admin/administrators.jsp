@@ -181,33 +181,33 @@
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>DNI/NIE/NIF</label>
-                                        <input type="text" class="form-control" id="dni_user">
+                                        <input type="text" class="form-control" id="dni_user" required>
                                     </div>
                                     <div id="errorDNI"></div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Name</label>
-                                        <input type="text" class="form-control" id="name_user">
+                                        <input type="text" class="form-control" id="name_user" required>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Date of birth</label>
-                                        <input type="text" class="form-control" id="date_user">
+                                        <input type="text" class="form-control" id="date_user" required>
                                     </div>
                                     <div id="errorDate"></div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Address</label>
-                                        <input type="text"  class="form-control" id="address_user">
+                                        <input type="text"  class="form-control" id="address_user" required>
                                     </div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
                                         <label>Phone</label>
-                                        <input type="text"  class="form-control" id="phone_user">
+                                        <input type="text"  class="form-control" id="phone_user" required>
                                     </div>
                                     <div id="errorPhone"></div>
                                 </div>

@@ -77,7 +77,7 @@ function countUsers() {
     var users = [0, 0, 0];
     firebase.database().ref('Users/').once('value').then(function (snapshot) {
         snapshot.forEach(function (childX) {
-            if (childX.child("type").val() === "administrator") {
+            if (childX.child("type").val() === "administrator" && childX.key !== sessionStorage.getItem("id")) {
                 users[0] += 1;
                 document.getElementById("total_administrators").innerHTML = users[0];
             }
@@ -131,9 +131,7 @@ function updateUsers() {
     } else if (tipo === "teacher") {
         category = document.getElementById("category").value;
     }
-    console.log("Hola");
     if (validateDNI(dni) && validateDate(date) && validatePhone(phone)) {
-        console.log("Hola2");
         firebase.database().ref('Users/' + id).update({
             dni: document.getElementById("dni_user").value,
             name: document.getElementById("name_user").value,
@@ -170,12 +168,9 @@ function deleteUser() {
 function getAdministratorsData() {
     getSessionData();
     var database = firebase.database().ref('Users/').once('value').then(function (snapshot) {
-        //alert(snapshot.key);
         var content = "";
         snapshot.forEach(function (childX) {
-            //alert(childX.key);
-            //alert(childX.child("type").val());
-            if (childX.child("type").val() === "administrator") {
+            if (childX.child("type").val() === "administrator" && childX.key !== sessionStorage.getItem("id")) {
                 content += "<tr>" + "<td>" + childX.child("dni").val() + "</td>" +
                         "<td>" + childX.child("name").val() + "</td>" +
                         "<td>" + childX.child("phone").val() + "</td>" +
@@ -244,7 +239,6 @@ function saveImage(uid) {
         window.location = "home.jsp";
     });
 }
-
 function addUsers() {
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
@@ -252,44 +246,59 @@ function addUsers() {
     var dni = document.getElementById("dni").value;
     var date = document.getElementById("age").value;
     var phone = document.getElementById("phone").value;
-
+    var categoria = " ";
+   
     if (validatePass(password, password_repeat) && validateDNI(dni) && validateDate(date) && validatePhone(phone)) {
         firebase.auth().createUserWithEmailAndPassword(email, password).then(function (snapshot) {
-            //console.log("Sin " + snapshot);
-            //console.log("Con " + snapshot.uid);
-            if (document.getElementById("tipo").value === "administrator") {
-                categoria = " ";
-            } else if (document.getElementById("tipo").value === "student") {
-                categoria = document.getElementById("categoryStudent").value;
-            } else if (document.getElementById("tipo").value === "teacher") {
-                categoria = document.getElementById("categoryTeacher").value;
-            }
-
-            firebase.database().ref('Users/' + snapshot.uid).set({
-                dni: document.getElementById("dni").value,
-                name: document.getElementById("addname").value,
-                birth: document.getElementById("age").value,
-                address: document.getElementById("address").value,
-                phone: document.getElementById("phone").value,
-                information: document.getElementById("info").value,
-                type: document.getElementById("tipo").value,
-                category: categoria
-            }, function (error) {
-                if (error)
-                    alert(error);
-                else
-                    saveImage(snapshot.uid);
+         if (document.getElementById("rol").value === "Student") {
+            categoria = document.getElementById("student_selection").value;
+         } else if (document.getElementById("rol").value === "Teacher") {
+            categoria = document.getElementById("teacher_selection").value;
+         }
+         firebase.database().ref('Users/' + snapshot.uid).set({
+            dni: document.getElementById("dni").value,
+            name: document.getElementById("addname").value,
+            birth: document.getElementById("age").value,
+            address: document.getElementById("address").value,
+            phone: document.getElementById("phone").value,
+            information: document.getElementById("info").value,
+            type: document.getElementById("rol").value,
+            category: categoria
+         }, function (error) {
+            if (error)
+                alert(error);
+            else
+                saveImage(snapshot.uid);
             });
-        }).catch(function (error) {
+         }).catch(function (error) {
             var errorMessage = error.message;
             document.getElementById("error").innerHTML = errorMessage;
-        });
+         });
     }
 }
 
-function handleClick() {
-    var tipo = document.getElementById("tipo").value;
+function selectRol() {
+    var rol = document.getElementById("rol").value;
+    if (rol === "Student") {
+        document.getElementById("category_student").style.display = "flex";
+        document.getElementById("category_teacher").style.display = "none";
+    } else if (rol === "Teacher") {
+        document.getElementById("category_student").style.display = "none";
+        document.getElementById("category_teacher").style.display = "flex";
+    } else if (rol === "Administrator") {
+        document.getElementById("category_student").style.display = "none";
+        document.getElementById("category_teacher").style.display = "none";
+    }
+}
 
+function resetAddUserForm() {
+    getSessionData();
+    document.getElementById("category_student").style.display = "flex";
+    document.getElementById("category_teacher").style.display = "none";
+}
+
+/*function handleClick() {
+    var tipo = document.getElementById("tipo").value;
     document.getElementById("Category").style.display = "none";
     document.getElementById("CategoryT").style.display = "none";
     if (tipo === "student") {
@@ -297,14 +306,25 @@ function handleClick() {
     } else if (tipo === "teacher") {
         document.getElementById("CategoryT").style.display = "flex";
     }
-}
+}*/
 
 function validateDNI(dni) {
     var ex_regular_dni = /^\d{8}[A-Z]$/;
     if (ex_regular_dni.test(dni) !== true) {
+        document.getElementById("dni").style.borderColor="red";
         document.getElementById("errorDNI").innerHTML = "Dni erroneo, formato no válido";
         return false;
     } else {
+        firebase.database().ref("Users/").once('value', function (snapshot) {
+            snapshot.forEach(function (childSnapshot) {
+                if (childSnapshot.child("dni").val() === dni) {
+                    document.getElementById("dni").style.borderColor="red";
+                    document.getElementById("errorDNI").innerHTML = "There is already a registered user with that DNI";
+                    return false;
+                }
+            });
+        });
+        document.getElementById("dni").style.borderColor="";
         document.getElementById("errorDNI").innerHTML = "";
         return true;
     }
@@ -313,9 +333,11 @@ function validateDNI(dni) {
 function validateDate(date) {
     var ex_regular_date = /^([0-2][0-9]|3[0-1])(\/|-)(0[1-9]|1[0-2])\2(\d{4})(\s)?(([0-1][0-9]|2[0-3])(:)([0-5][0-9]))*/;
     if (ex_regular_date.test(date) !== true) {
+        document.getElementById("age").style.borderColor="red";
         document.getElementById("errorDate").innerHTML = "Fecha de nacimiento errónea, formato no válido. Ej 1-1-2000";
         return false;
     } else {
+        document.getElementById("age").style.borderColor="";
         document.getElementById("errorDate").innerHTML = "";
         return true;
     }
@@ -325,21 +347,26 @@ function validateDate(date) {
 function validatePhone(phone) {
     var ex_regular_phone = /^\d{9,}$/;
     if (ex_regular_phone.test(phone) !== true) {
+        document.getElementById("phone").style.borderColor="red";
         document.getElementById("errorPhone").innerHTML = "Teléfono erróneo, formato no válido.";
         return false;
     } else {
+        document.getElementById("phone").style.borderColor="";
         document.getElementById("errorPhone").innerHTML = "";
         return true;
     }
 }
 
 function validatePass(password, password_repeat) {
-
     if (password !== password_repeat) {
-        document.getElementById("errorPass").innerHTML = "Passwords not match";
+        alert(document.getElementById("password").style.borderColor);
+        document.getElementById("password").style.borderColor="";
+        document.getElementById("password_repeat").style.borderColor="red";
+        document.getElementById("errorPass").innerHTML = "Passwords do not match";
         return false;
     } else {
-        document.getElementById("errorPass").innerHTML = "";
+        document.getElementById("password").style.borderColor="";
+        document.getElementById("password_repeat").style.borderColor="";
         return true;
     }
 }

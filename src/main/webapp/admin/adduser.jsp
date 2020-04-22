@@ -28,7 +28,7 @@
                 <script src="assets/js/respond.min.js"></script>
         <![endif]-->
     </head>
-    <body onload="getSessionData()">
+    <body onload="resetAddUserForm()">
 
         <!-- Main Wrapper -->
         <div class="main-wrapper">
@@ -138,25 +138,25 @@
                                     <h4 class="card-title">User data</h4>
                                 </div>
                                 <div class="card-body">
-                                    <form action="javascript:addUsers()">
-
+                                    <form onsubmit="addUsers();
+                                            return false">
                                         <div class="form-group row">
-                                            <label class="col-lg-3 col-form-label">Email:</label>
+                                            <label class="col-lg-3 col-form-label">Email</label>
                                             <div class="col-lg-9">
-                                                <input type="email" class="form-control" id="email" >
+                                                <input type="email" class="form-control" id="email" required>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Password</label>
                                             <div class="col-lg-9">
-                                                <input type="password" class="form-control" id="password">
+                                                <input type="password" class="form-control" id="password" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Repeat Password</label>
                                             <div class="col-lg-9">
-                                                <input type="password" class="form-control" id="password_repeat">
+                                                <input type="password" class="form-control" id="password_repeat" required>
                                             </div>
                                             <div id="errorPass"></div>
                                         </div>
@@ -164,7 +164,7 @@
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">DNI/NIE/NIF</label>
                                             <div class="col-lg-9">
-                                                <input type="text" class="form-control" id="dni">
+                                                <input type="text" class="form-control" id="dni" required>
                                             </div>
                                             <div id="errorDNI"></div>
                                         </div>
@@ -172,26 +172,26 @@
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Name</label>
                                             <div class="col-lg-9">
-                                                <input type="text" class="form-control" id="addname">
+                                                <input type="text" class="form-control" id="addname" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Date of birth</label>
                                             <div class="col-lg-9">
-                                                <input type="text" class="form-control" id="age">
+                                                <input type="text" class="form-control" id="age" required>
                                             </div>
                                             <div id="errorDate"></div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Address</label>
                                             <div class="col-lg-9">
-                                                <input type="text" class="form-control" id="address">
+                                                <input type="text" class="form-control" id="address" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Phone</label>
                                             <div class="col-lg-9">
-                                                <input type="text" class="form-control" id="phone">
+                                                <input type="text" class="form-control" id="phone" required>
                                             </div>
                                             <div id="errorPhone"></div>
                                         </div>
@@ -205,26 +205,24 @@
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Image</label>
                                             <div class="col-lg-9">
-                                                <input type="file" class="form-control" id="image">
+                                                <input type="file" class="form-control" id="image" required>
                                             </div>
                                         </div>
-
-
                                         <div class="form-group row" id="Rol">
                                             <label class="col-lg-3 col-form-label">Type</label>
                                             <div class="col-lg-9">
-                                                <select class="select" id="tipo" onchange="handleClick()">
-                                                    <option value="student">Student</option>
-                                                    <option value="teacher">Teacher</option>
-                                                    <option value="administrator" selected>Administrator</option>
+                                                <select class="select" id="rol" onchange="selectRol()" required>
+                                                    <option value="Student" selected>Student</option>
+                                                    <option value="Teacher">Teacher</option>
+                                                    <option value="Administrator">Administrator</option>
                                                 </select>
                                             </div>
                                         </div>
 
-                                        <div class="form-group row" id="Category">
+                                        <div class="form-group row" id="category_student">
                                             <label class="col-lg-3 col-form-label">Category</label>
                                             <div class="col-lg-9">
-                                                <select class="select" id="categoryStudent">
+                                                <select class="select" id="student_selection">
                                                     <option value="First year">First year</option>
                                                     <option value="First year - Double grade">First year - Double grade</option>
                                                     <option value="Second year">Second year</option>
@@ -243,10 +241,10 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row" id="CategoryT">
+                                        <div class="form-group row" id="category_teacher">
                                             <label class="col-lg-3 col-form-label">Category</label>
                                             <div class="col-lg-9">
-                                                <select class="select" id="categoryTeacher">
+                                                <select class="select" id="teacher_selection">
                                                     <option value="Software architecture">Software architecture</option>
                                                     <option value="User interface design">User interface design</option>
                                                     <option value="Embedded and Real Time Systems">Embedded and Real Time Systems</option>

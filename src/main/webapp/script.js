@@ -1,5 +1,5 @@
 firebase.auth().onAuthStateChanged(function (user) {
-    if (user) { // User is signed in, now check user type and put session variables
+    if (user) { 
         var user = firebase.auth().currentUser;
         if (user !== null) {
             var name = "";
@@ -18,10 +18,6 @@ firebase.auth().onAuthStateChanged(function (user) {
 });
 
 function accountNotDeleted(uid) {
-    /*
-     * If the user data does not exist in the DB but if in authentication, 
-     * the account is not valid
-     */
     var database = firebase.database().ref().child('Users/' + uid);
     database.once('value', function (snapshot) {
         if (!snapshot.exists()) {
@@ -285,7 +281,6 @@ function addUsers() {
     } else if (document.getElementById("rol").value === "Teacher") {
         category = document.getElementById("teacher_selection").value;
     }
-
     validatePass(password, password_repeat);
     validateDNI(dni, "");
     validateDate(birth);

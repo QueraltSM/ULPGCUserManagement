@@ -182,8 +182,9 @@
                                     <div class="form-group">
                                         <label>DNI/NIE/NIF</label>
                                         <input type="text" class="form-control" id="dni" required>
+                                        <div id="errorDNI" class="error_label"></div>
                                     </div>
-                                    <div id="errorDNI"></div>
+                                    
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
@@ -195,8 +196,9 @@
                                     <div class="form-group">
                                         <label>Date of birth</label>
                                         <input type="text" class="form-control" id="birth" required>
+                                        <div id="errorDate" class="error_label"></div>
                                     </div>
-                                    <div id="errorDate"></div>
+    
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
@@ -208,8 +210,9 @@
                                     <div class="form-group">
                                         <label>Phone</label>
                                         <input type="text"  class="form-control" id="phone" required>
+                                        <div id="errorPhone" class="error_label"></div>
                                     </div>
-                                    <div id="errorPhone"></div>
+                                    
                                 </div>
                                 <div class="col-24 col-sm-10">
                                     <div class="form-group">
@@ -217,10 +220,17 @@
                                         <textarea class="form-control" rows="3" id="information"></textarea>
                                     </div>
                                 </div>
-                                <div class="col-12 col-sm-6">
+                                                                <div class="col-24 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Actual profile photo</label>
+                                        <img id="profile_photo" class="img-thumbnail" width="200" height="200">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12 col-sm-10"> 
                                     <div class="form-group">
                                         <label>Image</label>
-                                        <input type="file"  class="form-control"  id="profile_photo" accept="image/*">
+                                        <input type="file"  class="form-control"  onchange="uploadPreviewPhoto()" id="new_profile_photo" accept="image/*">
                                     </div>
                                 </div>
                             </div>

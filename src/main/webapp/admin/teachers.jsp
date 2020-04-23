@@ -182,8 +182,9 @@
                                     <div class="form-group">
                                         <label>DNI/NIE/NIF</label>
                                         <input type="text" class="form-control" id="dni">
+                                        <div id="errorDNI" class="error_label"></div>
                                     </div>
-                                    <div id="errorDNI"></div>
+                                    
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
@@ -195,8 +196,8 @@
                                     <div class="form-group">
                                         <label>Date of birth</label>
                                         <input type="text" class="form-control" id="birth">
+                                        <div id="errorDate" class="error_label"></div>
                                     </div>
-                                    <div id="errorDate"></div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
@@ -208,8 +209,8 @@
                                     <div class="form-group">
                                         <label>Phone</label>
                                         <input type="text"  class="form-control" id="phone">
+                                        <div id="errorPhone" class="error_label"></div>
                                     </div>
-                                    <div id="errorPhone"></div>
                                 </div>
                                 <div class="col-12 col-sm-6">
                                     <div class="form-group">
@@ -236,10 +237,17 @@
                                         <textarea class="form-control" rows="3" id="information"></textarea>
                                     </div>
                                 </div>
-                                <div class="col-12 col-sm-6">
+                                <div class="col-24 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Actual profile photo</label>
+                                        <img id="profile_photo" class="img-thumbnail" width="200" height="200">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12 col-sm-10"> 
                                     <div class="form-group">
                                         <label>Image</label>
-                                        <input type="file"  class="form-control"  id="profile_photo" accept="image/*">
+                                        <input type="file"  class="form-control"  onchange="uploadPreviewPhoto()" id="new_profile_photo" accept="image/*">
                                     </div>
                                 </div>
                             </div>
@@ -255,17 +263,11 @@
         <div class="modal fade" id="delete_modal" aria-hidden="true" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document" >
                 <div class="modal-content">
-                    <!--	<div class="modal-header">
-                                    <h5 class="modal-title">Delete</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                    </button>
-                            </div>-->
                     <div class="modal-body">
                         <div class="form-content p-2">
                             <h4 class="modal-title">Delete</h4>
                             <p class="mb-4">Are you sure want to delete?</p>
-                            <button type="button" class="btn btn-primary" onclick="deleteUser()" data-dismiss="modal">Save</button>
+                            <button type="button" class="btn btn-primary" onclick="deleteUser()">Save</button>
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
                         </div>
                     </div>
@@ -273,32 +275,6 @@
             </div>
         </div>
         <!-- /Delete Modal -->
-
-
-
-        <!-- Delete Modal -->
-        <div class="modal fade" id="error_modal" aria-hidden="true" role="dialog">
-            <div class="modal-dialog modal-dialog-centered" role="document" >
-                <div class="modal-content">
-                    <!--	<div class="modal-header">
-                                    <h5 class="modal-title">Error</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                    </button>
-                            </div>-->
-                    <div class="modal-body">
-                        <div class="form-content p-2">
-                            <h4 class="modal-title">Error</h4>
-                            <p class="mb-4">DNI/NIE/NIF already exist. Check it out</p>
-                            <button type="button" class="btn btn-primary">Ok</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- /Delete Modal -->
-
-
         <!-- /Main Wrapper -->
 
         <!-- jQuery -->

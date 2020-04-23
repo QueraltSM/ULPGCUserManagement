@@ -202,14 +202,22 @@
                                             <div class="col-lg-9">
                                                 <textarea class="form-control" id="information" rows="6"></textarea>
                                             </div>
-                                        </div>
-
+                                        </div>  
+    
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Image</label>
                                             <div class="col-lg-9">
-                                                <input type="file" class="form-control" id="profile_photo" required accept="image/*">
+                                                <input type="file"  class="form-control"  onchange="uploadPreviewPhoto()" id="new_profile_photo" accept="image/*">
                                             </div>
-                                        </div>
+                                        </div> 
+       
+                                        <div class="form-group row" id="photo_preview">
+                                            <label class="col-lg-3 col-form-label">Photo preview</label>
+                                            <div class="col-lg-9">
+                                                <img id="profile_photo" class="img-thumbnail" width="200" height="200">
+                                            </div>
+                                        </div> 
+                                        
                                         <div class="form-group row" id="Rol">
                                             <label class="col-lg-3 col-form-label">Type</label>
                                             <div class="col-lg-9">

@@ -241,10 +241,17 @@
                                         <textarea class="form-control" rows="3" id="information"></textarea>
                                     </div>
                                 </div>
-                                <div class="col-12 col-sm-6">
+                                <div class="col-24 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Actual profile photo</label>
+                                        <img id="profile_photo" class="img-thumbnail" width="200" height="200">
+                                    </div>
+                                </div>
+                                
+                                <div class="col-12 col-sm-10"> 
                                     <div class="form-group">
                                         <label>Image</label>
-                                        <input type="file"  class="form-control"  id="profile_photo" accept="image/*">
+                                        <input type="file"  class="form-control"  onchange="uploadPreviewPhoto()" id="new_profile_photo" accept="image/*">
                                     </div>
                                 </div>
                             </div>

@@ -109,9 +109,8 @@
                                             <button class="btn btn-primary btn-block btn-lg login-btn" type="button" onclick="login()">Login</button>
                                             <div class="login-or">
                                                 <span class="or-line"></span>
-
                                             </div>
-                                            <div id="error"></div>
+                                            <div id="error"><br><br></div>
                                             <div id="demo"></div>
                                             <div id="name"></div>
                                             <div id="type"></div>

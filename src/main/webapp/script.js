@@ -1,27 +1,48 @@
 firebase.auth().onAuthStateChanged(function (user) {
-    if (user) {
+    if (user) { // User is signed in, now check user type and put session variables
         var user = firebase.auth().currentUser;
-
         if (user !== null) {
-            email = user.email;
-            uid = user.uid;
             var name = "";
-            var type = "";
-
-            var database = firebase.database().ref('Users/' + uid).once('value').then(function (snapshot) {
-                name = snapshot.val().name;
-                type = snapshot.val().type;
-
-                if (type === "administrator") {
-                    sessionStorage.setItem("name", name);
-                    sessionStorage.setItem("type", type);
-                    sessionStorage.setItem("id", uid);
-                    window.location.replace("admin/home.jsp");
-                }
+            var usref = firebase.database().ref("Users/" + firebase.auth().currentUser.uid); // Database URL
+            usref.once('value', function (snapshot) {
+                snapshot.forEach(function (childSnapshot) {
+                    if (childSnapshot.key === "name")
+                        name = childSnapshot.val();
+                    if (childSnapshot.key === "type") {
+                        replaceLocation(name, childSnapshot.val());
+                    }
+                });
             });
         }
     }
 });
+
+function accountNotDeleted(uid) {
+    /*
+     * If the user data does not exist in the DB but if in authentication, 
+     * the account is not valid
+     */
+    var database = firebase.database().ref().child('Users/' + uid);
+    database.once('value', function (snapshot) {
+        if (!snapshot.exists()) {
+            alert("Account does not exist");
+        }
+    });
+}
+
+function replaceLocation(name, type) { // Set session variables and replace location
+    sessionStorage.setItem("name", name);
+    sessionStorage.setItem("type", type);
+    sessionStorage.setItem("id", firebase.auth().currentUser.uid);
+    var database = firebase.database().ref().child('Users/' + firebase.auth().currentUser.uid);
+    database.once('value', function (snapshot) {
+        if (!snapshot.exists()) {
+            alert("Account does not exist");
+        } else {
+            if (type === "administrator") window.location.replace("admin/home.jsp");
+        }
+    });
+}
 
 function login() {
     var email = document.getElementById("email").value;
@@ -30,10 +51,7 @@ function login() {
     console.log(password);
 
     firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        console.log(errorMessage);
-        document.getElementById("error").innerHTML = errorMessage;
+        document.getElementById("error").innerHTML = error.message;
     });
 }
 
@@ -62,7 +80,7 @@ function connectToFirebase() {
 
 function getSessionData() {
     connectToFirebase();
-    fotos();
+    loadUserPhoto();
     if (window.location.href === "http://localhost:8080/ULPGCUserManagement/admin/home.jsp") {
         countUsers();
     }
@@ -93,51 +111,83 @@ function countUsers() {
     });
 }
 
+function setProfilePhoto(id) {
+    var imageRef = firebase.storage().ref().child(id + ".jpg");
+    imageRef.getDownloadURL().then(function (url) {
+        document.getElementById("profile_photo").src = url;
+    }).catch(function (error) {
+        alert(error);
+    });
+}
+
 function setUserInfo(id) {
     storeUIDSelected(id);
     firebase.database().ref('Users/' + id).once('value').then(function (snapshot) {
         sessionStorage.setItem("type_users", snapshot.child("type").val());
-        document.getElementById("dni_user").value = snapshot.child("dni").val();
-        document.getElementById("name_user").value = snapshot.child("name").val();
-        document.getElementById("date_user").value = snapshot.child("birth").val();
-        document.getElementById("address_user").value = snapshot.child("address").val();
-        document.getElementById("phone_user").value = snapshot.child("phone").val();
-        document.getElementById("information_user").value = snapshot.child("information").val();
+        document.getElementById("dni").value = snapshot.child("dni").val();
+        document.getElementById("username").value = snapshot.child("name").val();
+        document.getElementById("birth").value = snapshot.child("birth").val();
+        document.getElementById("address").value = snapshot.child("address").val();
+        document.getElementById("phone").value = snapshot.child("phone").val();
+        document.getElementById("information").value = snapshot.child("information").val();
         if (snapshot.child("type").val() !== "administrator") {
             document.getElementById("category").value = snapshot.child("category").val();
         }
     });
+    setProfilePhoto(id);
 }
 
 function storeUIDSelected(uid) {
     sessionStorage.setItem("id_users", uid);
 }
 
+function uploadPreviewPhoto() {
+    if (document.getElementById("photo_preview") !== null) document.getElementById("photo_preview").style.display = "flex";
+    var reader = new FileReader();
+    reader.onload = function (event) {
+        document.getElementById("profile_photo").src = event.target.result;
+    };
+    reader.readAsDataURL(document.getElementById("new_profile_photo").files[0]);
+}
+
 function updateUsers() {
     var dni = document.getElementById("dni").value;
-    var username = document.getElementById("username").value;
-    var address = document.getElementById("address").value;
     var phone = document.getElementById("phone").value;
     var birth = document.getElementById("birth").value;
-    var information = document.getElementById("information").value;
     var category = "";
-    
     if (sessionStorage.getItem("type_users") === "teacher" || sessionStorage.getItem("type_users") === "student") {
         category = document.getElementById("category").value;
     }
+    sessionStorage.setItem("validation", "true");
+    validateDNI(dni, sessionStorage.getItem("id_users"));
+    validateDate(birth);
+    validatePhone(phone);
     
-    if (validateDNI(dni) && validateDate(birth) && validatePhone(phone)) {
+    if (sessionStorage.getItem("validation") === "true") {
         firebase.database().ref('Users/' + sessionStorage.getItem("id_users")).update({
-            dni: document.getElementById("dni").value,
+            dni: dni,
             name: document.getElementById("username").value,
-            birth: document.getElementById("birth").value,
+            birth: birth,
             address: document.getElementById("address").value,
-            phone: document.getElementById("phone").value,
+            phone: phone,
             information: document.getElementById("information").value,
             category: category
-        });
-        saveImage(sessionStorage.getItem("id_users"));
+         });
+         saveImage(sessionStorage.getItem("id_users"), "edit");
+    } else {
+        sessionStorage.setItem("validation", "false");
     }
+}
+
+function deletePhoto(uid) {
+    var storageRef = firebase.storage().ref();
+    var storeRef = storageRef.child(uid + ".jpg");
+    storeRef.delete().then(function () {
+        $('#delete_modal').modal('hide');
+        location.reload();
+    }).catch(function (error) {
+        alert(error);
+    });
 }
 
 function deleteUser() {
@@ -204,7 +254,7 @@ function getStudentsData() {
     });
 }
 
-function fotos() {
+function loadUserPhoto() {
     var uid = sessionStorage.getItem("id");
     var starsRef = firebase.storage().ref().child(uid + ".jpg").getDownloadURL().then(function (url) {
         document.getElementById('imagenU').src = url;
@@ -214,20 +264,20 @@ function fotos() {
     });
 }
 
-function saveImage(uid) {
-    var file = document.getElementById("profile_photo").files[0];
-    var storageRef = firebase.storage().ref();
-    var thisRef = storageRef.child(uid + ".jpg");
+function saveImage(uid, action) {
+    var file = document.getElementById("new_profile_photo").files[0];
+    var thisRef = firebase.storage().ref().child(uid + ".jpg");
     thisRef.put(file).then(function (snapshot) {
         window.location = "home.jsp";
     });
 }
+
 function addUsers() {
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
     var password_repeat = document.getElementById("password_repeat").value;
     var dni = document.getElementById("dni").value;
-    var address = document.getElementById("birth").value;
+    var birth = document.getElementById("birth").value;
     var phone = document.getElementById("phone").value;
     var category = " ";
     if (document.getElementById("rol").value === "Student") {
@@ -235,35 +285,37 @@ function addUsers() {
     } else if (document.getElementById("rol").value === "Teacher") {
         category = document.getElementById("teacher_selection").value;
     }
-    
+
     validatePass(password, password_repeat);
-    validateDNI(dni);
-    validateDate(address);
+    validateDNI(dni, "");
+    validateDate(birth);
     validatePhone(phone);
 
-    if (sessionStorage.getItem("validation")==="true") {
+    if (sessionStorage.getItem("validation") === "true") {
         firebase.auth().createUserWithEmailAndPassword(email, password).then(function (snapshot) {
             firebase.database().ref('Users/' + snapshot.uid).set({
                 dni: dni,
                 name: document.getElementById("username").value,
                 birth: birth,
-                address: address,
+                address: document.getElementById("address").value,
                 phone: phone,
                 information: document.getElementById("information").value,
                 type: document.getElementById("rol").value.toLowerCase(),
                 category: category
-             }, function (error) {
+            }, function (error) {
                 if (error)
                     alert(error);
                 else
-                    saveImage(snapshot.uid);
-                });
-         }).catch(function (error) {
-            document.getElementById("email").style.borderColor="red";
+                    saveImage(snapshot.uid, "");
+            });
+        }).catch(function (error) {
+            document.getElementById("email").style.borderColor = "red";
             document.getElementById("errorEmail").innerHTML = "Email is already in use.";
             sessionStorage.setItem("validation", "false");
-         });
+        });
     } else {
+        document.getElementById("email").style.borderColor = "";
+        document.getElementById("errorEmail").innerHTML = "";
         sessionStorage.setItem("validation", "true");
     }
 }
@@ -286,26 +338,27 @@ function resetAddUserForm() {
     getSessionData();
     document.getElementById("category_student").style.display = "flex";
     document.getElementById("category_teacher").style.display = "none";
+    document.getElementById("photo_preview").style.display = "none";
 }
 
 
-function validateDNI(dni) {
+function validateDNI(dni, uid) {
     var ex_regular_dni = /^\d{8}[A-Z]$/;
     if (ex_regular_dni.test(dni) !== true) {
-        document.getElementById("dni").style.borderColor="red";
+        document.getElementById("dni").style.borderColor = "red";
         document.getElementById("errorDNI").innerHTML = "Invalid DNI. Must have 8 digits and 1 letter.";
         sessionStorage.setItem("validation", "false");
     } else {
         firebase.database().ref("Users/").once('value', function (snapshot) {
             snapshot.forEach(function (childSnapshot) {
-                if (childSnapshot.child("dni").val() === dni) {
-                    document.getElementById("dni").style.borderColor="red";
+                if (childSnapshot.child("dni").val() === dni && childSnapshot.key !== uid) {
+                    document.getElementById("dni").style.borderColor = "red";
                     document.getElementById("errorDNI").innerHTML = "There is already a registered user with that DNI";
                     sessionStorage.setItem("validation", "false");
                 }
             });
         });
-        document.getElementById("dni").style.borderColor="";
+        document.getElementById("dni").style.borderColor = "";
         document.getElementById("errorDNI").innerHTML = "";
     }
 }
@@ -313,36 +366,36 @@ function validateDNI(dni) {
 function validateDate(date) {
     var ex_regular_date = /^([0-2][0-9]|3[0-1])(\/|-)(0[1-9]|1[0-2])\2(\d{4})(\s)?(([0-1][0-9]|2[0-3])(:)([0-5][0-9]))*/;
     if (ex_regular_date.test(date) !== true) {
-        document.getElementById("birth").style.borderColor="red";
+        document.getElementById("birth").style.borderColor = "red";
         document.getElementById("errorDate").innerHTML = "Invalid birth data. Follow dd-MM-yyyy format.";
         sessionStorage.setItem("validation", "false");
     } else {
-        document.getElementById("birth").style.borderColor="";
+        document.getElementById("birth").style.borderColor = "";
         document.getElementById("errorDate").innerHTML = "";
     }
-    return true;
 }
 
 function validatePhone(phone) {
-    var ex_regular_phone = /^\d{9,}$/;
+    var ex_regular_phone = /^[679]{1}[0-9]{8}$/;
     if (ex_regular_phone.test(phone) !== true) {
-        document.getElementById("phone").style.borderColor="red";
+        document.getElementById("phone").style.borderColor = "red";
         document.getElementById("errorPhone").innerHTML = "Invalid data. Phone must have 9 digits.";
         sessionStorage.setItem("validation", "false");
     } else {
-        document.getElementById("phone").style.borderColor="";
+        document.getElementById("phone").style.borderColor = "";
         document.getElementById("errorPhone").innerHTML = "";
     }
 }
 
 function validatePass(password, password_repeat) {
     if (password !== password_repeat) {
-        document.getElementById("password").style.borderColor="red";
-        document.getElementById("password_repeat").style.borderColor="red";
+        document.getElementById("password").style.borderColor = "red";
+        document.getElementById("password_repeat").style.borderColor = "red";
         document.getElementById("errorPass").innerHTML = "Passwords do not match";
         sessionStorage.setItem("validation", "false");
     } else {
-        document.getElementById("password").style.borderColor="";
-        document.getElementById("password_repeat").style.borderColor="";
+        document.getElementById("password").style.borderColor = "";
+        document.getElementById("password_repeat").style.borderColor = "";
+        document.getElementById("errorPass").innerHTML = "";
     }
 }

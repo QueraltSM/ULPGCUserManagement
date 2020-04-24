@@ -1,51 +1,40 @@
 firebase.auth().onAuthStateChanged(function (user) {
-    if (user) { 
+    if (user) {
         var user = firebase.auth().currentUser;
         if (user !== null) {
             var name = "";
             var usref = firebase.database().ref("Users/" + firebase.auth().currentUser.uid); // Database URL
             usref.once('value', function (snapshot) {
-                snapshot.forEach(function (childSnapshot) {
-                    if (childSnapshot.key === "name")
-                        name = childSnapshot.val();
-                    if (childSnapshot.key === "type") {
-                        replaceLocation(name, childSnapshot.val());
-                    }
-                });
+                if (!snapshot.exists()) {
+                    document.getElementById("error").innerHTML = "Account does not exist";
+                } else {
+                    snapshot.forEach(function (childSnapshot) {
+                        if (childSnapshot.key === "name")
+                            name = childSnapshot.val();
+                        if (childSnapshot.key === "type") {
+                            replaceLocation(name, childSnapshot.val());
+                        }
+                    });
+                }
             });
         }
     }
 });
 
-function accountNotDeleted(uid) {
-    var database = firebase.database().ref().child('Users/' + uid);
-    database.once('value', function (snapshot) {
-        if (!snapshot.exists()) {
-            alert("Account does not exist");
-        }
-    });
-}
-
-function replaceLocation(name, type) { // Set session variables and replace location
-    sessionStorage.setItem("name", name);
-    sessionStorage.setItem("type", type);
-    sessionStorage.setItem("id", firebase.auth().currentUser.uid);
-    var database = firebase.database().ref().child('Users/' + firebase.auth().currentUser.uid);
-    database.once('value', function (snapshot) {
-        if (!snapshot.exists()) {
-            alert("Account does not exist");
-        } else {
-            if (type === "administrator") window.location.replace("admin/home.jsp");
-        }
-    });
+function replaceLocation(name, type) {
+    if (type !== "administrator") {
+        document.getElementById("error").innerHTML = "User has no rights to access";
+    } else {
+        sessionStorage.setItem("name", name);
+        sessionStorage.setItem("type", type);
+        sessionStorage.setItem("id", firebase.auth().currentUser.uid);
+        window.location.replace("admin/home.jsp");
+    }
 }
 
 function login() {
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
-    console.log(email);
-    console.log(password);
-
     firebase.auth().signInWithEmailAndPassword(email, password).catch(function (error) {
         document.getElementById("error").innerHTML = error.message;
     });
@@ -116,8 +105,11 @@ function setProfilePhoto(id) {
     });
 }
 
-function setUserInfo(id) {
-    storeUIDSelected(id);
+function resetEditUserForm() {
+    document.getElementById("category_student").style.display = "none";
+    document.getElementById("category_teacher").style.display = "none";
+    getSessionData();
+    var id = sessionStorage.getItem("id_users");
     firebase.database().ref('Users/' + id).once('value').then(function (snapshot) {
         sessionStorage.setItem("type_users", snapshot.child("type").val());
         document.getElementById("dni").value = snapshot.child("dni").val();
@@ -126,19 +118,29 @@ function setUserInfo(id) {
         document.getElementById("address").value = snapshot.child("address").val();
         document.getElementById("phone").value = snapshot.child("phone").val();
         document.getElementById("information").value = snapshot.child("information").val();
-        if (snapshot.child("type").val() !== "administrator") {
-            document.getElementById("category").value = snapshot.child("category").val();
+        if (snapshot.child("type").val() === "teacher") {
+            document.getElementById("category_teacher").style.display = "flex";
+            document.getElementById("category_student").style.display = "none";
+            document.getElementById("teacher_selection").value = snapshot.child("category").val();
+        } else if (snapshot.child("type").val() === "student") {
+            document.getElementById("category_student").style.display = "flex";
+            document.getElementById("category_teacher").style.display = "none";
+            document.getElementById("student_selection").value = snapshot.child("category").val();
         }
     });
     setProfilePhoto(id);
 }
 
-function storeUIDSelected(uid) {
+
+function storeUIDSelected(uid, action) {
+    if (action === "edit")
+        window.location = "edituser.jsp";
     sessionStorage.setItem("id_users", uid);
 }
 
 function uploadPreviewPhoto() {
-    if (document.getElementById("photo_preview") !== null) document.getElementById("photo_preview").style.display = "flex";
+    if (document.getElementById("photo_preview") !== null)
+        document.getElementById("photo_preview").style.display = "flex";
     var reader = new FileReader();
     reader.onload = function (event) {
         document.getElementById("profile_photo").src = event.target.result;
@@ -146,32 +148,67 @@ function uploadPreviewPhoto() {
     reader.readAsDataURL(document.getElementById("new_profile_photo").files[0]);
 }
 
+
+function checkDNI(dni, uid) {
+    var val = "";
+    firebase.database().ref("Users/").once('value', function (snapshot) {
+        snapshot.forEach(function (childSnapshot) {
+            if (childSnapshot.key !== uid) {
+                if (childSnapshot.child("dni").val() === dni) {
+                    document.getElementById("dni").style.borderColor = "red";
+                    document.getElementById("errorDNI").innerHTML = "There is already a registered user with that DNI";
+                    val = "false";
+                }
+            }
+        });
+        if (val !== "false")
+            update();
+    });
+}
+
+function update() {
+    var dni = document.getElementById("dni").value;
+    var phone = document.getElementById("phone").value;
+    var birth = document.getElementById("birth").value;
+    var category = "";
+    if (sessionStorage.getItem("type_users") === "teacher") {
+        category = document.getElementById("teacher_selection").value;
+    } else if (sessionStorage.getItem("type_users") === "student") {
+        category = document.getElementById("student_selection").value;
+    }
+    firebase.database().ref('Users/' + sessionStorage.getItem("id_users")).update({
+        dni: dni,
+        name: document.getElementById("username").value,
+        birth: birth,
+        address: document.getElementById("address").value,
+        phone: phone,
+        information: document.getElementById("information").value,
+        category: category
+    });
+    saveImage(sessionStorage.getItem("id_users"), "edit");
+}
+
 function updateUsers() {
     var dni = document.getElementById("dni").value;
     var phone = document.getElementById("phone").value;
     var birth = document.getElementById("birth").value;
     var category = "";
-    if (sessionStorage.getItem("type_users") === "teacher" || sessionStorage.getItem("type_users") === "student") {
-        category = document.getElementById("category").value;
+
+    if (sessionStorage.getItem("type_users") === "teacher") {
+        category = document.getElementById("teacher_selection").value;
+    } else if (sessionStorage.getItem("type_users") === "student") {
+        category = document.getElementById("student_selection").value;
     }
-    sessionStorage.setItem("validation", "true");
+
     validateDNI(dni, sessionStorage.getItem("id_users"));
     validateDate(birth);
     validatePhone(phone);
-    
-    if (sessionStorage.getItem("validation") === "true") {
-        firebase.database().ref('Users/' + sessionStorage.getItem("id_users")).update({
-            dni: dni,
-            name: document.getElementById("username").value,
-            birth: birth,
-            address: document.getElementById("address").value,
-            phone: phone,
-            information: document.getElementById("information").value,
-            category: category
-         });
-         saveImage(sessionStorage.getItem("id_users"), "edit");
-    } else {
-        sessionStorage.setItem("validation", "false");
+
+
+    if (sessionStorage.getItem("validation_dni_update") === "true" &&
+            sessionStorage.getItem("validation_birth_update") === "true"
+            && sessionStorage.getItem("validation_phone_update") === "true") {
+        checkDNI(dni, sessionStorage.getItem("id_users"));
     }
 }
 
@@ -203,7 +240,7 @@ function getAdministratorsData() {
                 content += "<tr>" + "<td>" + childX.child("dni").val() + "</td>" +
                         "<td>" + childX.child("name").val() + "</td>" +
                         "<td>" + childX.child("phone").val() + "</td>" +
-                        '<td><a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2" onclick=setUserInfo("' + childX.key + '")> <i class="fe fe-pencil"></i> Edit</a>' +
+                        '<td><a class="btn btn-sm bg-success-light mr-2" onclick=storeUIDSelected("' + childX.key + '","edit")> <i class="fe fe-pencil"></i> Edit</a>' +
                         '<a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal" onclick=storeUIDSelected("' + childX.key + '")>    <i class="fe fe-trash"></i> Delete </a></td>' +
                         "</tr>";
             }
@@ -222,8 +259,8 @@ function getTeachersData() {
                         "<td>" + childX.child("name").val() + "</td>" +
                         "<td>" + childX.child("category").val() + "</td>" +
                         "<td>" + childX.child("phone").val() + "</td>" +
-                        '<td><a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2" onclick=setUserInfo("' + childX.key + '")> <i class="fe fe-pencil"></i> Edit</a>' +
-                        '<a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal">    <i class="fe fe-trash"></i> Delete </a></td>' +
+                        '<td><a class="btn btn-sm bg-success-light mr-2" onclick=storeUIDSelected("' + childX.key + '","edit")> <i class="fe fe-pencil"></i> Edit</a>' +
+                        '<a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal" onclick=storeUIDSelected("' + childX.key + '")>    <i class="fe fe-trash"></i> Delete </a></td>' +
                         "</tr>";
             }
         });
@@ -241,8 +278,8 @@ function getStudentsData() {
                         "<td>" + childX.child("name").val() + "</td>" +
                         "<td>" + childX.child("category").val() + "</td>" +
                         "<td>" + childX.child("phone").val() + "</td>" +
-                        '<td><a data-toggle="modal" href="#edit_invoice_report" class="btn btn-sm bg-success-light mr-2" onclick=setUserInfo("' + childX.key + '")> <i class="fe fe-pencil"></i> Edit</a>' +
-                        '<a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal">    <i class="fe fe-trash"></i> Delete </a></td>' +
+                        '<td><a class="btn btn-sm bg-success-light mr-2" onclick=storeUIDSelected("' + childX.key + '","edit")> <i class="fe fe-pencil"></i> Edit</a>' +
+                        '<a class="btn btn-sm bg-danger-light" data-toggle="modal" href="#delete_modal" onclick=storeUIDSelected("' + childX.key + '")>    <i class="fe fe-trash"></i> Delete </a></td>' +
                         "</tr>";
             }
         });
@@ -260,12 +297,16 @@ function loadUserPhoto() {
     });
 }
 
-function saveImage(uid, action) {
+function saveImage(uid) {
     var file = document.getElementById("new_profile_photo").files[0];
-    var thisRef = firebase.storage().ref().child(uid + ".jpg");
-    thisRef.put(file).then(function (snapshot) {
+    if (file === undefined)
         window.location = "home.jsp";
-    });
+    else {
+        var thisRef = firebase.storage().ref().child(uid + ".jpg");
+        thisRef.put(file).then(function (snapshot) {
+            window.location = "home.jsp";
+        });
+    }
 }
 
 function addUsers() {
@@ -286,7 +327,9 @@ function addUsers() {
     validateDate(birth);
     validatePhone(phone);
 
-    if (sessionStorage.getItem("validation") === "true") {
+    if (sessionStorage.getItem("validation_pass") === "true" && sessionStorage.getItem("validation_dni") === "true" &&
+            sessionStorage.getItem("validation_birth") === "true" && sessionStorage.getItem("validation_phone") === "true") {
+
         firebase.auth().createUserWithEmailAndPassword(email, password).then(function (snapshot) {
             firebase.database().ref('Users/' + snapshot.uid).set({
                 dni: dni,
@@ -306,12 +349,10 @@ function addUsers() {
         }).catch(function (error) {
             document.getElementById("email").style.borderColor = "red";
             document.getElementById("errorEmail").innerHTML = "Email is already in use.";
-            sessionStorage.setItem("validation", "false");
         });
     } else {
         document.getElementById("email").style.borderColor = "";
         document.getElementById("errorEmail").innerHTML = "";
-        sessionStorage.setItem("validation", "true");
     }
 }
 
@@ -334,6 +375,13 @@ function resetAddUserForm() {
     document.getElementById("category_student").style.display = "flex";
     document.getElementById("category_teacher").style.display = "none";
     document.getElementById("photo_preview").style.display = "none";
+    sessionStorage.getItem("validation_dni", "false");
+    sessionStorage.getItem("validation_birth", "false");
+    sessionStorage.getItem("validation_phone", "false");
+    sessionStorage.getItem("validation_pass", "false");
+    sessionStorage.getItem("validation_dni_update", "false");
+    sessionStorage.getItem("validation_birth_update", "false");
+    sessionStorage.getItem("validation_phone_update", "false");
 }
 
 
@@ -342,31 +390,28 @@ function validateDNI(dni, uid) {
     if (ex_regular_dni.test(dni) !== true) {
         document.getElementById("dni").style.borderColor = "red";
         document.getElementById("errorDNI").innerHTML = "Invalid DNI. Must have 8 digits and 1 letter.";
-        sessionStorage.setItem("validation", "false");
+        sessionStorage.setItem("validation_dni", "false");
+        sessionStorage.setItem("validation_dni_update", "false");
     } else {
-        firebase.database().ref("Users/").once('value', function (snapshot) {
-            snapshot.forEach(function (childSnapshot) {
-                if (childSnapshot.child("dni").val() === dni && childSnapshot.key !== uid) {
-                    document.getElementById("dni").style.borderColor = "red";
-                    document.getElementById("errorDNI").innerHTML = "There is already a registered user with that DNI";
-                    sessionStorage.setItem("validation", "false");
-                }
-            });
-        });
         document.getElementById("dni").style.borderColor = "";
         document.getElementById("errorDNI").innerHTML = "";
+        sessionStorage.setItem("validation_dni", "true");
+        sessionStorage.setItem("validation_dni_update", "true");
     }
 }
 
 function validateDate(date) {
-    var ex_regular_date = /^([0-2][0-9]|3[0-1])(\/|-)(0[1-9]|1[0-2])\2(\d{4})(\s)?(([0-1][0-9]|2[0-3])(:)([0-5][0-9]))*/;
+    var ex_regular_date = /^([0-2][0-9]|(3)[0-1])(\/)(((0)[0-9])|((1)[0-2]))(\/)\d{4}$/;
     if (ex_regular_date.test(date) !== true) {
         document.getElementById("birth").style.borderColor = "red";
         document.getElementById("errorDate").innerHTML = "Invalid birth data. Follow dd-MM-yyyy format.";
-        sessionStorage.setItem("validation", "false");
+        sessionStorage.setItem("validation_birth", "false");
+        sessionStorage.setItem("validation_birth_update", "false");
     } else {
         document.getElementById("birth").style.borderColor = "";
         document.getElementById("errorDate").innerHTML = "";
+        sessionStorage.setItem("validation_birth", "true");
+        sessionStorage.setItem("validation_birth_update", "true");
     }
 }
 
@@ -375,11 +420,15 @@ function validatePhone(phone) {
     if (ex_regular_phone.test(phone) !== true) {
         document.getElementById("phone").style.borderColor = "red";
         document.getElementById("errorPhone").innerHTML = "Invalid data. Phone must have 9 digits.";
-        sessionStorage.setItem("validation", "false");
+        sessionStorage.setItem("validation_phone", "false");
+        sessionStorage.setItem("validation_phone_update", "false");
     } else {
         document.getElementById("phone").style.borderColor = "";
         document.getElementById("errorPhone").innerHTML = "";
+        sessionStorage.setItem("validation_phone", "true");
+        sessionStorage.setItem("validation_phone_update", "true");
     }
+
 }
 
 function validatePass(password, password_repeat) {
@@ -387,10 +436,11 @@ function validatePass(password, password_repeat) {
         document.getElementById("password").style.borderColor = "red";
         document.getElementById("password_repeat").style.borderColor = "red";
         document.getElementById("errorPass").innerHTML = "Passwords do not match";
-        sessionStorage.setItem("validation", "false");
+        sessionStorage.setItem("validation_pass", "false");
     } else {
         document.getElementById("password").style.borderColor = "";
         document.getElementById("password_repeat").style.borderColor = "";
         document.getElementById("errorPass").innerHTML = "";
+        sessionStorage.setItem("validation_pass", "true");
     }
 }

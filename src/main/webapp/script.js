@@ -149,7 +149,7 @@ function uploadPreviewPhoto() {
 }
 
 
-function checkDNI(dni, uid) {
+function checkUpdate(dni, uid) {
     var val = "";
     firebase.database().ref("Users/").once('value', function (snapshot) {
         snapshot.forEach(function (childSnapshot) {
@@ -208,7 +208,7 @@ function updateUsers() {
     if (sessionStorage.getItem("validation_dni_update") === "true" &&
             sessionStorage.getItem("validation_birth_update") === "true"
             && sessionStorage.getItem("validation_phone_update") === "true") {
-        checkDNI(dni, sessionStorage.getItem("id_users"));
+        checkUpdate(dni, sessionStorage.getItem("id_users"));
     }
 }
 
@@ -309,7 +309,8 @@ function saveImage(uid) {
     }
 }
 
-function addUsers() {
+
+function add() {
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
     var password_repeat = document.getElementById("password_repeat").value;
@@ -322,38 +323,65 @@ function addUsers() {
     } else if (document.getElementById("rol").value === "Teacher") {
         category = document.getElementById("teacher_selection").value;
     }
+
+    firebase.auth().createUserWithEmailAndPassword(email, password).then(function (snapshot) {
+        firebase.database().ref('Users/' + snapshot.uid).set({
+            dni: dni,
+            name: document.getElementById("username").value,
+            birth: birth,
+            address: document.getElementById("address").value,
+            phone: phone,
+            information: document.getElementById("information").value,
+            type: document.getElementById("rol").value.toLowerCase(),
+            category: category
+        }, function (error) {
+            if (error)
+                alert(error);
+            else
+                saveImage(snapshot.uid, "");
+        });
+    }).catch(function (error) {
+        document.getElementById("email").style.borderColor = "red";
+        document.getElementById("errorEmail").innerHTML = "Email is already in use.";
+    });
+}
+
+
+function checkAdd(dni, uid) {
+    var val = "";
+    firebase.database().ref("Users/").once('value', function (snapshot) {
+        snapshot.forEach(function (childSnapshot) {
+            if (childSnapshot.key !== uid) {
+                if (childSnapshot.child("dni").val() === dni) {
+                    document.getElementById("dni").style.borderColor = "red";
+                    document.getElementById("errorDNI").innerHTML = "There is already a registered user with that DNI";
+                    val = "false";
+                }
+            }
+        });
+        if (val !== "false")
+            add();
+    });
+}
+
+function addUsers() {
+    var password = document.getElementById("password").value;
+    var password_repeat = document.getElementById("password_repeat").value;
+    var dni = document.getElementById("dni").value;
+    var birth = document.getElementById("birth").value;
+    var phone = document.getElementById("phone").value;
+
     validatePass(password, password_repeat);
-    validateDNI(dni, "");
+    validateDNI(dni, sessionStorage.getItem("id_users"));
     validateDate(birth);
     validatePhone(phone);
 
-    if (sessionStorage.getItem("validation_pass") === "true" && sessionStorage.getItem("validation_dni") === "true" &&
-            sessionStorage.getItem("validation_birth") === "true" && sessionStorage.getItem("validation_phone") === "true") {
-
-        firebase.auth().createUserWithEmailAndPassword(email, password).then(function (snapshot) {
-            firebase.database().ref('Users/' + snapshot.uid).set({
-                dni: dni,
-                name: document.getElementById("username").value,
-                birth: birth,
-                address: document.getElementById("address").value,
-                phone: phone,
-                information: document.getElementById("information").value,
-                type: document.getElementById("rol").value.toLowerCase(),
-                category: category
-            }, function (error) {
-                if (error)
-                    alert(error);
-                else
-                    saveImage(snapshot.uid, "");
-            });
-        }).catch(function (error) {
-            document.getElementById("email").style.borderColor = "red";
-            document.getElementById("errorEmail").innerHTML = "Email is already in use.";
-        });
-    } else {
-        document.getElementById("email").style.borderColor = "";
-        document.getElementById("errorEmail").innerHTML = "";
+    if (sessionStorage.getItem("validation_dni_update") === "true" &&
+            sessionStorage.getItem("validation_birth_update") === "true"
+            && sessionStorage.getItem("validation_phone_update") === "true") {
+        checkAdd(dni, sessionStorage.getItem("id_users"));
     }
+
 }
 
 function selectRol() {

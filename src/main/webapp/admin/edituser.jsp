@@ -268,13 +268,10 @@
         <!-- Bootstrap Core JS -->
         <script src="assets/js/popper.min.js"></script>
         <script src="assets/js/bootstrap.min.js"></script>
-
         <!-- Slimscroll JS -->
         <script src="assets/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-
         <!-- Select2 JS -->
         <script src="assets/js/select2.min.js"></script>
-
         <!-- Custom JS -->
         <script  src="assets/js/script.js"></script>
         <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>

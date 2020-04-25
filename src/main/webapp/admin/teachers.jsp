@@ -435,6 +435,7 @@
 
         </div>
 
+<<<<<<< HEAD
 
 
 
@@ -590,6 +591,8 @@
         </div>
         <!-- /Edit Details Modal -->
 
+=======
+>>>>>>> develop
         <!-- Delete Modal -->
         <div class="modal fade" id="delete_modal" aria-hidden="true" role="dialog">
             <div class="modal-dialog modal-dialog-centered" role="document" >

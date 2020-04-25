@@ -159,8 +159,12 @@
                                 </div>
                                 <div class="card-body">
 <<<<<<< HEAD
+<<<<<<< HEAD
                                     <form onsubmit="addUsers();
                                             return false">
+=======
+                                    <form onsubmit="addUsers(); return false">
+>>>>>>> develop
                                         <div class="form-group row">
                                             <label class="col-lg-3 col-form-label">Email</label>
                                             <div class="col-lg-9">

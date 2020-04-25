@@ -96,6 +96,7 @@
                                         <div class="login-header">
                                             <h3>Login</h3>
                                         </div>
+<<<<<<< HEAD
                                         <form>
                                             <div class="form-group form-focus">
                                                 <input type="email" id="email" class="form-control floating">
@@ -114,11 +115,33 @@
                                             <div id="demo"></div>
                                             <div id="name"></div>
                                             <div id="type"></div>
+=======
+                                        <form action='admin/home.jsp'>
+                                            <div class="form-group form-focus">
+                                                <input type="email" class="form-control floating">
+                                                <label class="focus-label">Email</label>
+                                            </div>
+                                            <div class="form-group form-focus">
+                                                <input type="password" class="form-control floating">
+                                                <label class="focus-label">Password</label>
+                                            </div>
+
+                                            <button class="btn btn-primary btn-block btn-lg login-btn" type="submit" onclick="showError()">Login</button>
+                                            <div class="login-or">
+                                                <span class="or-line"></span>
+
+                                            </div>
+
+>>>>>>> origin
                                         </form>
                                     </div>
                                 </div>
                             </div>
                             <!-- /Login Tab Content -->
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin
                         </div>
                     </div>
 
@@ -158,6 +181,7 @@
 
 <!-- Custom JS -->
 <script src="assets/js/script.js"></script>
+<<<<<<< HEAD
     <link href="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/css/alertify.min.css" rel="stylesheet"/>
     <script src="https://cdn.jsdelivr.net/npm/alertifyjs@1.11.0/build/alertify.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
@@ -175,5 +199,8 @@
                 firebase.initializeApp(config);
     </script>
     <script src="script.js"></script>
+=======
+
+>>>>>>> origin
 </body>
 </html>

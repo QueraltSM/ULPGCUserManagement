@@ -33,7 +33,11 @@
                 <script src="assets/js/respond.min.js"></script>
         <![endif]-->
     </head>
+<<<<<<< HEAD
     <body onload="getSessionData()">
+=======
+    <body>
+>>>>>>> origin
 
         <!-- Main Wrapper -->
         <div class="main-wrapper">
@@ -64,24 +68,44 @@
 
                 <!-- Header Right Menu -->
                 <ul class="nav user-menu">
+<<<<<<< HEAD
                     <!-- User Menu -->
                     <li class="nav-item dropdown has-arrow">
                         <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
                             <span class="user-img"><img class="rounded-circle"  width="31" id="imagenU"></span>
+=======
+
+                    <!-- User Menu -->
+                    <li class="nav-item dropdown has-arrow">
+                        <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                            <span class="user-img"><img class="rounded-circle" src="assets/img/profiles/avatar-01.jpg" width="31" alt="Ryan Taylor"></span>
+>>>>>>> origin
                         </a>
                         <div class="dropdown-menu">
                             <div class="user-header">
                                 <div class="avatar avatar-sm">
+<<<<<<< HEAD
                                     <img id="imagenU2" alt="User Image" class="avatar-img rounded-circle">
                                 </div>
                                 <div class="user-text">
                                     <h6 id="name"></h6>
                                     <p class="text-muted mb-0" id="type"></p>
+=======
+                                    <img src="assets/img/profiles/avatar-01.jpg" alt="User Image" class="avatar-img rounded-circle">
+                                </div>
+                                <div class="user-text">
+                                    <h6>Ryan Taylor</h6>
+                                    <p class="text-muted mb-0">Administrator</p>
+>>>>>>> origin
                                 </div>
                             </div>
                             <a class="dropdown-item" >My Profile</a>
                             <a class="dropdown-item">Settings</a>
+<<<<<<< HEAD
                             <a class="dropdown-item" href="javascript:logout()">Logout</a>
+=======
+                            <a class="dropdown-item" href="../index.jsp">Logout</a>
+>>>>>>> origin
                         </div>
                     </li>
                     <!-- /User Menu -->
@@ -133,7 +157,11 @@
                     <div class="page-header">
                         <div class="row">
                             <div class="col-sm-12">
+<<<<<<< HEAD
                                 <h3 class="page-title" id="welcome"></h3>
+=======
+                                <h3 class="page-title">Welcome Admin!</h3>
+>>>>>>> origin
                                 <ul class="breadcrumb">
                                     <li class="breadcrumb-item active">Dashboard</li>
                                 </ul>
@@ -151,7 +179,11 @@
                                                 <i class="fe fe-users"></i>
                                             </span>
                                             <div class="dash-count">
+<<<<<<< HEAD
                                                 <h3 id="total_teachers"></h3>
+=======
+                                                <h3>168</h3>
+>>>>>>> origin
                                             </div>
                                         </div>
                                         <div class="dash-widget-info">
@@ -168,7 +200,11 @@
                                                 <i class="fe fe-users"></i>
                                             </span>
                                             <div class="dash-count">
+<<<<<<< HEAD
                                                 <h3 id="total_students"></h3>
+=======
+                                                <h3>152</h3>
+>>>>>>> origin
                                             </div>
                                         </div>
                                         <div class="dash-widget-info">
@@ -185,7 +221,11 @@
                                                 <i class="fe fe-users"></i>
                                             </span>
                                             <div class="dash-count">
+<<<<<<< HEAD
                                                 <h3 id="total_administrators"></h3>
+=======
+                                                <h3>487</h3>
+>>>>>>> origin
                                             </div>
                                         </div>
                                         <div class="dash-widget-info">
@@ -222,7 +262,10 @@
         <!-- Custom JS -->
         <script  src="assets/js/script.js"></script>
 
+<<<<<<< HEAD
         <script src="https://www.gstatic.com/firebasejs/4.8.1/firebase.js"></script>
         <script src="../script.js"></script>
+=======
+>>>>>>> origin
     </body>
 </html>
